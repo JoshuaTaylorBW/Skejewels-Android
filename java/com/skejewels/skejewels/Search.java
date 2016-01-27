@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -81,23 +82,28 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         checkParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.textView3);
         checkParams.addRule(RelativeLayout.ALIGN_START, R.id.textView3);
 
-        nicknameParams.addRule(RelativeLayout.BELOW, R.id.checkBox1);
-        nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.checkBox1);
-        nicknameParams.addRule(RelativeLayout.ALIGN_START, R.id.checkBox1);
-        nicknameParams.setMargins(140, 0, 0, 0);
-
         created = new CheckBox(Search.this);
         created.setTextColor(Color.parseColor("#000000"));
-        created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
-        created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
+        created.setTextSize(20);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
+            created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
+        }
         created.setText("fuck this");
+        created.setId(View.generateViewId());
+        contentHolder.addView(created, checkParams);
+
+        nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
+        nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
+        nicknameParams.addRule(RelativeLayout.ALIGN_START, created.getId());
+        nicknameParams.setMargins(140, 0, 0, 0);
 
         nickName = new TextView(Search.this);
         nickName.setTextAppearance(this, android.R.style.TextAppearance_Small);
-        created.setTextColor(Color.parseColor("#888888"));
+        nickName.setTextColor(Color.parseColor("#888888"));
         nickName.setText("Nick Name");
+        nickName.setId(View.generateViewId());
 
-        contentHolder.addView(created, checkParams);    
         contentHolder.addView(nickName, nicknameParams);    
 
 
@@ -122,13 +128,13 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         boolean checked = ((CheckBox) view).isChecked();
 
         switch(view.getId()) {
-            case R.id.checkBox1:
-                if (checked){
-                    Log.d("FROM_SEARCH", "checked");    
-                }else {
-                    Log.d("FROM_SEARCH", "checked");
-                }
-                break;
+//            case R.id.checkBox1:
+//                if (checked){
+//                    Log.d("FROM_SEARCH", "checked");
+//                }else {
+//                    Log.d("FROM_SEARCH", "checked");
+//                }
+//                break;
         }
     }
 
