@@ -87,17 +87,12 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
-                    for (int i = 0; i < ids.size(); i++) {
-                        View myView = findViewById(Integer.parseInt(ids.get(i)));
-                        contentHolder.removeView(myView);
-                    }
-                    lastNicknameId = R.id.textView3;
                     what = eventNameEditor.getText().toString();
                     if(!what.contains(" ")){
                         what += "*";
-                    }else{
-                        what.replace(" ", "%20");
                     }
+                    what = what.replaceAll(" ", "%20");
+
                     Log.d("search", what);
                     new task().execute();
                 } else {
@@ -285,6 +280,11 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         private int eventNumber = 0;
         protected void onPostExecute(Void v){
             try {
+                lastNicknameId = R.id.textView3;
+                for (int i = 0; i < ids.size(); i++) {
+                    View myView = findViewById(Integer.parseInt(ids.get(i)));
+                    contentHolder.removeView(myView);
+                }
                 String[] indivs = result.split(",");
                 for (int i = 1; i < indivs.length; i+=4) {
                     if(i == 1){
