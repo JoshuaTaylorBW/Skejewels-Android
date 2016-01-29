@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F2F3">
+
+    <fragment
+        android:id="@+id/fragment_navigation_drawer"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout="@layout/fragment_navigation"
+        android:name="com.basiccalc.slidenerdtut.NavigationDrawerFragment"
+        tools:layout="@layout/fragment_navigation"/>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.basiccalc.slidenerdtut.MainActivity"
+        android:background="#F1F2F3"
+        android:clickable="false"
+        android:id="@+id/ThirdLayout"
+        android:focusable="true"
+        android:elevation="10dp">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EventNameEditor"
+            android:hint="Search"
+            android:inputType="textCapWords"
+            android:textColor="@color/primaryColor"
+
+            android:backgroundTint="@color/primaryColor"
+            android:singleLine="false"
+            android:textColorHint="@color/primaryColor"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/imageView"
+            android:layout_toEndOf="@+id/imageView" />
+
+        <android.gesture.GestureOverlayView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gestureOverlayView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"></android.gesture.GestureOverlayView>
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView2"
+            android:layout_below="@+id/EventNameEditor"
+            android:layout_alignRight="@+id/EventNameEditor"
+            android:layout_alignEnd="@+id/EventNameEditor"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="0dp"
+                android:weightSum="1"
+                android:id="@+id/contentHolder"
+                android:layout_below="@+id/EventNameEditor"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Results"
+                    android:id="@+id/textView3"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/primaryColor"
+                    android:layout_marginTop="10dp" />
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/white_prev"
+            android:paddingTop="2dp"
+            android:layout_below="@+id/gestureOverlayView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/EventNameEditor" />
+
+
+    </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>
