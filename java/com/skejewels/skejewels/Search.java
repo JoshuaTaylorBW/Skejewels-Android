@@ -179,9 +179,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         created.setId(View.generateViewId());
         ids.add(Integer.toString(created.getId()));
 
-        created.setText("fuck this");
-        created.setId(View.generateViewId());
-
         contentHolder.addView(created, checkParams);
 
         nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
@@ -199,9 +196,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         lastNicknameId = nickName.getId();
 
         contentHolder.addView(nickName, nicknameParams);
-
-        nickName.setText("Nick Name");
-        nickName.setId(View.generateViewId());
 
         contentHolder.addView(nickName, nicknameParams);
 
