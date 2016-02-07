@@ -56,6 +56,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -67,20 +69,15 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
     public CheckBox created;
     public TextView nickName;
     public RelativeLayout contentHolder;
-
     public EditText eventNameEditor;
     private String what;
     private ArrayList<String> ids;
-    private int lastNicknameId;
-
     private RelativeLayout.LayoutParams checkParams, nicknameParams;
-
-
+    private int lastNicknameId;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
-
         lastNicknameId = R.id.textView3;
         contentHolder = (RelativeLayout) findViewById(R.id.contentHolder);
         eventNameEditor = (EditText) findViewById(R.id.EventNameEditor);
@@ -92,17 +89,12 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
-                    for (int i = 0; i < ids.size(); i++) {
-                        View myView = findViewById(Integer.parseInt(ids.get(i)));
-                        contentHolder.removeView(myView);
-                    }
-                    lastNicknameId = R.id.textView3;
                     what = eventNameEditor.getText().toString();
-                    if(!what.contains(" ")){
-                        what += "*";
-                    }else{
-                        what.replace(" ", "%20");
-                    }
+                    Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+                    Matcher m = p.matcher(what);
+                    boolean b = m.find();
+                    Log.d("search", "it is: " + b);
+
                     Log.d("search", what);
                     new task().execute();
                 } else {
@@ -157,15 +149,14 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
 
 
     }
-
     public void makeSearchResult(String usersName, String usersNickName, String id){
         checkParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         nicknameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        checkParams.addRule(RelativeLayout.BELOW, R.id.textView3);
-        checkParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.textView3);
-        checkParams.addRule(RelativeLayout.ALIGN_START, R.id.textView3);
-
+        checkParams.addRule(RelativeLayout.BELOW, lastNicknameId);
+        checkParams.addRule(RelativeLayout.ALIGN_LEFT, lastNicknameId);
+        checkParams.addRule(RelativeLayout.ALIGN_START, lastNicknameId);
+        checkParams.setMargins(-140, 0, 0, 0);
 
         created = new CheckBox(Search.this);
         created.setTextColor(Color.parseColor("#000000"));
@@ -174,11 +165,9 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
         }
-
         created.setText(usersName);
         created.setId(View.generateViewId());
         ids.add(Integer.toString(created.getId()));
-
         contentHolder.addView(created, checkParams);
 
         nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
@@ -189,16 +178,12 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         nickName = new TextView(Search.this);
         nickName.setTextAppearance(this, android.R.style.TextAppearance_Small);
         nickName.setTextColor(Color.parseColor("#888888"));
-
         nickName.setText(usersNickName);
         nickName.setId(View.generateViewId());
         ids.add(Integer.toString(nickName.getId()));
         lastNicknameId = nickName.getId();
 
         contentHolder.addView(nickName, nicknameParams);
-
-        contentHolder.addView(nickName, nicknameParams);
-
 
 
     }
@@ -233,7 +218,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
     }
 
 
-
     class task extends AsyncTask<String, String, Void> {
         private ProgressDialog progressDialog = new ProgressDialog(Search.this);
         InputStream is = null ;
@@ -247,7 +231,8 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         }
         protected Void doInBackground(String... params){
 
-        String url_select="http://skejewels.com/Android/AndroidSearch.php?q=" + what + "";
+        String url_select="http://skejewels.com/Android/AndroidSearch.php?q=" + what;
+        Log.d("search", url_select);
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url_select);
@@ -298,6 +283,11 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         private int eventNumber = 0;
         protected void onPostExecute(Void v){
             try {
+                lastNicknameId = R.id.textView3;
+                for (int i = 0; i < ids.size(); i++) {
+                    View myView = findViewById(Integer.parseInt(ids.get(i)));
+                    contentHolder.removeView(myView);
+                }
                 String[] indivs = result.split(",");
                 for (int i = 1; i < indivs.length; i+=4) {
                     if(i == 1){
@@ -312,8 +302,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             }
         }
     }
-
-
 
     public void onFragmentInteraction(int position) {
 
