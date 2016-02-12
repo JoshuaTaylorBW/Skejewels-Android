@@ -67,12 +67,13 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
 
     public CheckBox test;
     public CheckBox created;
-    public TextView nickName;
+    public TextView actualName, nickName;
     public RelativeLayout contentHolder;
     public EditText eventNameEditor;
     private String what;
     private ArrayList<String> ids;
-    private RelativeLayout.LayoutParams checkParams, nicknameParams;
+    private ArrayList<Integer> nameIds; //used for onclicklistener
+    private RelativeLayout.LayoutParams checkParams, nicknameParams, actualNameParams;
     private int lastNicknameId;
 
     public void onCreate(Bundle savedInstanceState){
@@ -82,12 +83,14 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         contentHolder = (RelativeLayout) findViewById(R.id.contentHolder);
         eventNameEditor = (EditText) findViewById(R.id.EventNameEditor);
         ids = new ArrayList<String>();
+        nameIds = new ArrayList<Integer>();
         eventNameEditor.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                 if (s.length() != 0) {
                     what = eventNameEditor.getText().toString();
                     Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
@@ -112,9 +115,21 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         });
     }
 
+    View.OnClickListener clicks=new View.OnClickListener() {
+        public void onClick(View view) {
+            TextView name = (TextView)view;
+            for (int i = 0; i < nameIds.size(); i++){
+                if(view.getId() == nameIds.get(i)){
+                    Log.d("from search", "name is: " + name.getHint());
+                }
+            }
+        }
+    };
+
     public void makeFirstSearchResult(String usersName, String usersNickName, String id){
         checkParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         nicknameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        actualNameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         checkParams.addRule(RelativeLayout.BELOW, lastNicknameId);
         checkParams.addRule(RelativeLayout.ALIGN_LEFT, lastNicknameId);
@@ -127,16 +142,28 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
         }
-        created.setText(usersName);
         created.setId(View.generateViewId());
         ids.add(Integer.toString(created.getId()));
         contentHolder.addView(created, checkParams);
+
+        actualNameParams.addRule(RelativeLayout.BELOW, lastNicknameId);
+        checkParams.addRule(RelativeLayout.ALIGN_START, lastNicknameId);
+        actualNameParams.addRule(RelativeLayout.RIGHT_OF, created.getId());
 
         nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
         nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
         nicknameParams.addRule(RelativeLayout.ALIGN_START, created.getId());
         nicknameParams.setMargins(140, 0, 0, 0);
 
+        actualName=new TextView(Search.this);
+        actualName.setTextAppearance(this, android.R.style.TextAppearance_Large);
+        actualName.setTextColor(Color.parseColor("#000000"));
+        actualName.setId(View.generateViewId());
+        ids.add(Integer.toString(actualName.getId()));
+        nameIds.add(actualName.getId());
+        actualName.setText(usersName);
+        contentHolder.addView(actualName, actualNameParams);
+        actualName.setOnClickListener(clicks);
         nickName = new TextView(Search.this);
         nickName.setTextAppearance(this, android.R.style.TextAppearance_Small);
         nickName.setTextColor(Color.parseColor("#888888"));
@@ -152,6 +179,9 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
     public void makeSearchResult(String usersName, String usersNickName, String id){
         checkParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         nicknameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        actualNameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        setName(usersName);
 
         checkParams.addRule(RelativeLayout.BELOW, lastNicknameId);
         checkParams.addRule(RelativeLayout.ALIGN_LEFT, lastNicknameId);
@@ -159,21 +189,33 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         checkParams.setMargins(-140, 0, 0, 0);
 
         created = new CheckBox(Search.this);
-        created.setTextColor(Color.parseColor("#000000"));
-        created.setTextSize(20);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
         }
-        created.setText(usersName);
         created.setId(View.generateViewId());
+        created.setHint(id);
         ids.add(Integer.toString(created.getId()));
         contentHolder.addView(created, checkParams);
+
+        actualNameParams.addRule(RelativeLayout.BELOW, lastNicknameId);
+        actualNameParams.addRule(RelativeLayout.RIGHT_OF, created.getId());
 
         nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
         nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
         nicknameParams.addRule(RelativeLayout.ALIGN_START, created.getId());
         nicknameParams.setMargins(140, 0, 0, 0);
+
+        actualName=new TextView(Search.this);
+        actualName.setTextAppearance(this, android.R.style.TextAppearance_Large);
+        actualName.setTextColor(Color.parseColor("#000000"));
+        actualName.setId(View.generateViewId());
+        actualName.setHint(id);
+        ids.add(Integer.toString(actualName.getId()));
+        nameIds.add(actualName.getId());
+        actualName.setText(usersName);
+        actualName.setOnClickListener(clicks);
+        contentHolder.addView(actualName, actualNameParams);
 
         nickName = new TextView(Search.this);
         nickName.setTextAppearance(this, android.R.style.TextAppearance_Small);
@@ -184,12 +226,17 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         lastNicknameId = nickName.getId();
 
         contentHolder.addView(nickName, nicknameParams);
+    }
+    public String tempName; //temp name is the name we're passing so we can access it in the onclick listener
+    public void setName(String name){
+        tempName = name;
+    }
 
-
+    public String getName(){
+        return tempName;
     }
 
     public void onClick(View view) {
-
     }
 
     public void addResults(){
@@ -207,13 +254,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         boolean checked = ((CheckBox) view).isChecked();
 
         switch(view.getId()) {
-//            case R.id.checkBox1:
-//                if (checked){
-//                    Log.d("FROM_SEARCH", "checked");
-//                }else {
-//                    Log.d("FROM_SEARCH", "checked");
-//                }
-//                break;
         }
     }
 
