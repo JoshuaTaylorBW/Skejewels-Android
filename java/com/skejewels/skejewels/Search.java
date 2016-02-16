@@ -122,7 +122,19 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             TextView name = (TextView)view;
             for (int i = 0; i < nameIds.size(); i++){
                 if(view.getId() == nameIds.get(i)){
-                    Log.d("from search", "name is: " + name.getHint());
+                  boolean areFriends = false;
+                  for (int j = 0; j < friends.length; j++) {
+                    Log.d("from search", friends[j] + "===" + ((TextView) view).getHint());
+                    if(((TextView) view).getHint().toString().equals(friends[j])){
+                      areFriends = true;
+                      break;
+                    }
+                  }
+                  if(areFriends){
+                    Log.d("from search", "you guys are friends");
+                  }else{
+                    Log.d("from search", "you guys are not friends");
+                  }
                 }
             }
         }
@@ -151,7 +163,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         created.setId(View.generateViewId());
         for (int i = 0; i < friends.length; i++) {
           if(id.equals(friends[i])){
-            Log.d("Searcher", "Correct");
             created.setChecked(true);
             break;
           }
@@ -175,6 +186,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         ids.add(Integer.toString(actualName.getId()));
         nameIds.add(actualName.getId());
         actualName.setText(usersName);
+        actualName.setHint(id);
         contentHolder.addView(actualName, actualNameParams);
         actualName.setOnClickListener(clicks);
         nickName = new TextView(Search.this);
@@ -209,7 +221,6 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         created.setId(View.generateViewId());
         Log.d("Some", Arrays.toString(friends));
         for (int i = 1; i < friends.length; i++) {
-          Log.d("Searcher", friends[i] + "===" + id);
           if(id.equals(friends[i])){
             Log.d("Searcher", "Correct");
             created.setChecked(true);
