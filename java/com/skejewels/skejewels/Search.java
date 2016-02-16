@@ -55,6 +55,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -148,6 +149,13 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
         }
         created.setId(View.generateViewId());
+        for (int i = 0; i < friends.length; i++) {
+          if(id.equals(friends[i])){
+            Log.d("Searcher", "Correct");
+            created.setChecked(true);
+            break;
+          }
+        }
         ids.add(Integer.toString(created.getId()));
         contentHolder.addView(created, checkParams);
 
@@ -199,6 +207,15 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
         }
         created.setId(View.generateViewId());
+        Log.d("Some", Arrays.toString(friends));
+        for (int i = 1; i < friends.length; i++) {
+          Log.d("Searcher", friends[i] + "===" + id);
+          if(id.equals(friends[i])){
+            Log.d("Searcher", "Correct");
+            created.setChecked(true);
+            break;
+          }
+        }
         created.setHint(id);
         ids.add(Integer.toString(created.getId()));
         contentHolder.addView(created, checkParams);
@@ -336,6 +353,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
                 }
                 String[] parts = result.split("~~~");
                 friends = parts[0].split(",");
+                Log.d("Search", "friends " + parts[0]);
                 String[] indivs = parts[1].split(",");
                 for (int i = 1; i < indivs.length; i+=4) {
                     if(i == 1){
