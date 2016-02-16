@@ -1,7 +1,7 @@
 package com.skejewels.skejewels;
 
-
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -71,6 +71,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
     public RelativeLayout contentHolder;
     public EditText eventNameEditor;
     private String what;
+    private String[] friends;
     private ArrayList<String> ids;
     private ArrayList<Integer> nameIds; //used for onclicklistener
     private RelativeLayout.LayoutParams checkParams, nicknameParams, actualNameParams;
@@ -125,6 +126,10 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             }
         }
     };
+
+    public static float pxFromDp(final Context context, final float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
 
     public void makeFirstSearchResult(String usersName, String usersNickName, String id){
         checkParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -200,6 +205,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
 
         actualNameParams.addRule(RelativeLayout.BELOW, lastNicknameId);
         actualNameParams.addRule(RelativeLayout.RIGHT_OF, created.getId());
+        actualNameParams.setMargins((int)pxFromDp(getApplicationContext(), -25), 0, 0, 0);
 
         nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
         nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
@@ -271,7 +277,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         }
         protected Void doInBackground(String... params){
 
-        String url_select="http://skejewels.com/Android/AndroidSearch.php?q=" + what;
+        String url_select="http://skejewels.com/Android/AndroidSearch.php?cId=1&q=" + what.replaceAll("\\s+","%20");
         Log.d("search", url_select);
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -328,7 +334,9 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
                     View myView = findViewById(Integer.parseInt(ids.get(i)));
                     contentHolder.removeView(myView);
                 }
-                String[] indivs = result.split(",");
+                String[] parts = result.split("~~~");
+                friends = parts[0].split(",");
+                String[] indivs = parts[1].split(",");
                 for (int i = 1; i < indivs.length; i+=4) {
                     if(i == 1){
                         makeFirstSearchResult(indivs[i + 1], indivs[i + 2], indivs[i]);
