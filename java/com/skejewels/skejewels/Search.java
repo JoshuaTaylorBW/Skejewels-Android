@@ -64,7 +64,7 @@ import java.util.regex.Pattern;
 /**
  * Created by j80ma_000 on 1/16/2016.
  */
-public class    Search extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener, OnItemSelectedListener {
+public class Search extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener, OnItemSelectedListener {
 
     public CheckBox test;
     public CheckBox created;
@@ -125,7 +125,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
                   boolean areFriends = false;
                   for (int j = 0; j < friends.length; j++) {
                     Log.d("from search", friends[j] + "===" + ((TextView) view).getHint());
-                    if(((TextView) view).getHint().toString().equals(friends[j])){
+                    if(((TextView) view).getHint().toString().split("\\s")[1].equals(friends[j])){
                       areFriends = true;
                       break;
                     }
@@ -160,6 +160,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
             created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
         }
+        created.setHint("checkbox " + id);
         created.setId(View.generateViewId());
         for (int i = 0; i < friends.length; i++) {
           if(id.equals(friends[i])){
@@ -171,13 +172,8 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         contentHolder.addView(created, checkParams);
 
         actualNameParams.addRule(RelativeLayout.BELOW, lastNicknameId);
-        checkParams.addRule(RelativeLayout.ALIGN_START, lastNicknameId);
         actualNameParams.addRule(RelativeLayout.RIGHT_OF, created.getId());
-
-        nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
-        nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
-        nicknameParams.addRule(RelativeLayout.ALIGN_START, created.getId());
-        nicknameParams.setMargins(140, 0, 0, 0);
+        actualNameParams.setMargins((int) pxFromDp(getApplicationContext(), -118), 0, 0, 0);
 
         actualName=new TextView(Search.this);
         actualName.setTextAppearance(this, android.R.style.TextAppearance_Large);
@@ -186,9 +182,15 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         ids.add(Integer.toString(actualName.getId()));
         nameIds.add(actualName.getId());
         actualName.setText(usersName);
-        actualName.setHint(id);
-        contentHolder.addView(actualName, actualNameParams);
+        actualName.setHint("name " + id);
         actualName.setOnClickListener(clicks);
+        contentHolder.addView(actualName, actualNameParams);
+
+        nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
+        nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
+        nicknameParams.addRule(RelativeLayout.ALIGN_START, created.getId());
+        nicknameParams.setMargins(140, 0, 0, 0);
+
         nickName = new TextView(Search.this);
         nickName.setTextAppearance(this, android.R.style.TextAppearance_Small);
         nickName.setTextColor(Color.parseColor("#888888"));
@@ -196,10 +198,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         nickName.setId(View.generateViewId());
         ids.add(Integer.toString(nickName.getId()));
         lastNicknameId = nickName.getId();
-
         contentHolder.addView(nickName, nicknameParams);
-
-
     }
     public void makeSearchResult(String usersName, String usersNickName, String id){
         checkParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -232,8 +231,8 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         contentHolder.addView(created, checkParams);
 
         actualNameParams.addRule(RelativeLayout.BELOW, lastNicknameId);
-        actualNameParams.addRule(RelativeLayout.RIGHT_OF, created.getId());
-        actualNameParams.setMargins((int)pxFromDp(getApplicationContext(), -25), 0, 0, 0);
+        actualNameParams.setMargins((int) pxFromDp(getApplicationContext(), 47
+        ), 0, 0, 0);
 
         nicknameParams.addRule(RelativeLayout.BELOW, created.getId());
         nicknameParams.addRule(RelativeLayout.ALIGN_LEFT, created.getId());
@@ -305,7 +304,7 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
         }
         protected Void doInBackground(String... params){
 
-        String url_select="http://skejewels.com/Android/AndroidSearch.php?cId=1&q=" + what.replaceAll("\\s+","%20");
+        String url_select="http://skejewels.com/Android/AndroidSearch.php?cId=188&q=" + what.replaceAll("\\s+","%20");
         Log.d("search", url_select);
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -364,20 +363,48 @@ public class    Search extends ActionBarActivity implements View.OnClickListener
                 }
                 String[] parts = result.split("~~~");
                 friends = parts[0].split(",");
-                Log.d("Search", "friends " + parts[0]);
-                String[] indivs = parts[1].split(",");
-                for (int i = 1; i < indivs.length; i+=4) {
-                    if(i == 1){
-                        makeFirstSearchResult(indivs[i + 1], indivs[i + 2], indivs[i]);
-                    }else{
-                        makeSearchResult(indivs[i + 1], indivs[i + 2], indivs[i]);
-                    }
-                }
+                moveFriendsToFront(parts[1].split(","), friends);
+
+                parts[1].split(",");
 
             }catch(Exception e){
                 Log.e("log_tag", "Error parsing data "+e.toString());
             }
         }
+    }
+
+    public ArrayList<String> moveFriendsToFront(String[] info, String[] friendIds){
+        ArrayList<String> finalOrder = new ArrayList<String>();
+        for(int i = 0; i < info.length - 1; i+=4){
+            boolean areFriends = false;
+            for(int j = 0; j < friendIds.length; j++){
+                if(info[i+1].   equals(friendIds[j])){
+                    areFriends = true;
+                }
+            }
+            if(areFriends){
+                finalOrder.add(0, (info[i + 1] + ",") + info[i + 2] + "," + info[i + 3]);
+                Log.d("Search", "info " + info.length + " " + i);
+            }else{
+                finalOrder.add((info[i + 1] + ",") + info[i + 2] + "," + info[i + 3]);
+                Log.d("Search", "info " + info.length + " " + i);
+            }
+
+        }
+
+        Log.d("Search", "lkjdfskljadfsklj" + finalOrder.toString());
+        for (int i = 0; i < finalOrder.size(); i++) {
+            String[] part = finalOrder.get(i).split(",");
+
+            Log.d("Search", "info " + i);
+
+            if(i == 0){
+                makeFirstSearchResult(part[1], part[2], part[0]);
+            }else{
+                makeSearchResult(part[1], part[2], part[0]);
+            }
+        }
+        return finalOrder;
     }
 
     public void onFragmentInteraction(int position) {

@@ -164,7 +164,9 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
         protected void onPostExecute(Void v){
             try {
                 String[] indivs = result.split(",");
-                likeAmount.setText(indivs[1] + " Likes");
+                if(Integer.parseInt(indivs[1]) > 0) {
+                    likeAmount.setText(indivs[1] + " Likes");
+                }
                 if(Integer.parseInt(indivs[2]) > 0){
                     new task2().execute();
                 }
