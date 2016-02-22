@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
-        android:src="@drawable/Gear"
+        android:src="@drawable/gear"
         android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true"
         android:background="@color/primaryColor"
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView2"
-        android:src="@drawable/RequestsIcon"
+        android:src="@drawable/requests_icon"
         android:layout_below="@+id/textView5"
         android:layout_toStartOf="@+id/textView7"
         android:layout_marginTop="10dp"
@@ -92,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
-        android:src="@drawable/Search"
+        android:src="@drawable/search"
         android:layout_alignTop="@+id/textView4"
         android:layout_alignStart="@+id/imageView3" />
 
