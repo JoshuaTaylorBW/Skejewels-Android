@@ -98,7 +98,7 @@ public class SecondClockActivity extends ActionBarActivity implements View.OnCli
     }
 
     @Override
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

@@ -53,6 +53,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
     private Toolbar toolbar;
     private Button title;
     private Button nextMonthButton, lastMonthButton;
+    private TextView searchText;
     private static final String TAG = Skejewels.class.getSimpleName();
     private ArrayList rows = new ArrayList<String>();
     private String[] Maybe = new String[]{};
@@ -77,10 +78,14 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
         title = (Button) findViewById(R.id.homeButton);
         title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
         nextMonthButton = (Button) findViewById(R.id.nextMonthClickable);
         nextMonthButton.setOnClickListener(this);
         lastMonthButton= (Button) findViewById(R.id.lastMonthClickable);
         lastMonthButton.setOnClickListener(this);
+
 
 
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
@@ -246,7 +251,9 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
     
             return super.onOptionsItemSelected(item);
         }
-        public void onFragmentInteraction(int position){}
+        public void onFragmentInteraction(View v){
+            Log.d("frag", Integer.toString(v.getId()));
+        }
     
         public void nextMonth(){
             if(monthInt == 11){
@@ -1585,7 +1592,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
                 Log.d(TAG,  "GOT TO HERE :) :) :)");
                 alreadyBegun = 0;
                 // new task().execute();
-                Intent intent = new Intent(this, Search.class);
+                Intent intent = new Intent(this, Skejewels.class);
                 startActivity(intent);
 
                 break;
@@ -1595,6 +1602,10 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
 
                 Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
 
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
                 break;
             case R.id.lastMonthClickable:
                 lastMonth();

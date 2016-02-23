@@ -92,7 +92,7 @@ public class FirstClockActivity extends ActionBarActivity implements View.OnClic
     }
 
     @Override
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

@@ -407,7 +407,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         return finalOrder;
     }
 
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

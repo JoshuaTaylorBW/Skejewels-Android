@@ -227,7 +227,7 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
     }
 
     @Override
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 
