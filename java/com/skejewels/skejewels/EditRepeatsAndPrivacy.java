@@ -103,7 +103,7 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
         }
     }
 
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

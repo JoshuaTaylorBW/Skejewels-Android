@@ -24,7 +24,6 @@ public class FullDrawerLayout extends DrawerLayout {
         super(context, attrs, defStyle);
     }
 
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);

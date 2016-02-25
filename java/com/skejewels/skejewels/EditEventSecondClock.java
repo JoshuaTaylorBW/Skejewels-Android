@@ -78,7 +78,7 @@ switch(view.getId()) {
         }
     }
 
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

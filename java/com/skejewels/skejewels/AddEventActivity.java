@@ -56,7 +56,8 @@ public class AddEventActivity extends ActionBarActivity implements View.OnClickL
     }
 
     @Override
-    public void onFragmentInteraction(int position) {
+
+    public void onFragmentInteraction(View v) {
 
     }
 

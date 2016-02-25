@@ -47,7 +47,7 @@ public class SignIn extends ActionBarActivity implements View.OnClickListener, N
     }
 
     @Override
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

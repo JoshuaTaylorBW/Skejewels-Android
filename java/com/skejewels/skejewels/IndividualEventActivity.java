@@ -90,7 +90,7 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
         }
     }
 
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 

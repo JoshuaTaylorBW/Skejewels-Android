@@ -1,6 +1,7 @@
 package com.skejewels.skejewels;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -152,7 +153,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     TextView addBox;
 
     public void addAddBox(){
-        layoutParams.setMargins(20, 100, 20, 200);
+        layoutParams.setMargins(20, (int)pxFromDp(getApplicationContext(), 75), 20, 0);
         addBox = new TextView(IndividualDayActivity.this);//create new instance of box
         addBox.setTextSize(20);
         addBox.setBackgroundColor(Color.WHITE);
@@ -180,15 +181,15 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         time = new TextView(IndividualDayActivity.this);
         time.setTextSize(20);
         time.setTextColor(Color.WHITE);
-        time.setText("A MILLI");//Set time of event. This will be dynamic.
+        time.setText("");//Set time of event. This will be dynamic.
         layout.addView(time, timeLayoutParams);
         eventsMade++;//add one to eventsMade for positioning.
     }
     public void addBoxes(){
         layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);//Create new dynamic layout
-        layoutParams.setMargins(20, 100, 20, 200);//Set initial positions
+        layoutParams.setMargins(20, 0, 20, 200);//Set initial positions
         timeLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);//Create new dynamic layout
-        timeLayoutParams.setMargins(1100, -480, 0, 0);//Set initial positions
+        timeLayoutParams.setMargins((int)pxFromDp(getApplicationContext(), 275), (int)pxFromDp(getApplicationContext(), -80), 0, 0);//Set initial positions
 
         //        //Copy and paste this to add to scrollview
         //        layoutParams.setMargins(20, 100, 20, 200);
@@ -208,15 +209,18 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         //        eventsMade++;//add one to eventsMade for positioning.
         //        //End Copy and paste
     }
+    public static float pxFromDp(final Context context, final float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
     public void makeEvent(String eventName, String eventTime, String eventId){
-        layoutParams.setMargins(20, 100, 20, 200);
+        layoutParams.setMargins(20, 0, 20, (int)pxFromDp(getApplicationContext(), 75));
         box = new TextView(IndividualDayActivity.this);//create new instance of box
         box.setTextSize(20);
         box.setBackgroundColor(Color.WHITE);
         box.setTextColor(Color.BLACK);
         box.setText(wrapEventName(eventName));// at Valley View Christian Church
         box.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-        box.setPadding(-750, 100, 0, 100);//Set padding of box. (Left, top, right, bottom)
+        box.setPadding((int)pxFromDp(getApplicationContext(), -200), 100, 0, 100);//Set padding of box. (Left, top, right, bottom)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             box.setElevation(8);
         }
@@ -382,7 +386,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     }
 
    //WHATEVER STUFF.
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

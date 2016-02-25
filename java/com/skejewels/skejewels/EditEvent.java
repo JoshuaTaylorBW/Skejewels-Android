@@ -93,7 +93,7 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
     }
 
     @Override
-    public void onFragmentInteraction(int position) {
+    public void onFragmentInteraction(View v) {
 
     }
 
