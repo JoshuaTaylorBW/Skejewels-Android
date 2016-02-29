@@ -113,6 +113,12 @@
         android:configChanges="orientation"
         android:screenOrientation="portrait">
     </activity>
+    <activity
+        android:name="com.skejewels.skejewels.FriendsCalendar"
+        android:label="@string/activity_friend_calendar"
+        android:configChanges="orientation"
+        android:screenOrientation="portrait">
+    </activity>
     </application>
 
 </manifest>

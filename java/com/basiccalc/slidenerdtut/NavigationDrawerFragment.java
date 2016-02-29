@@ -16,13 +16,6 @@ import android.view.ViewGroup;
 import com.skejewels.skejewels.Search;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NavigationDrawerFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * create an instance of this fragment.
- */
 public class NavigationDrawerFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
@@ -61,13 +54,11 @@ public class NavigationDrawerFragment extends Fragment {
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerLayout = drawerLayout;
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
-            @Override
             public void onDrawerOpened(View drawerView) {
                 Log.d("Opened", "opened");
                 super.onDrawerOpened(drawerView);
             }
 
-            @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
             }

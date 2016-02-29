@@ -116,7 +116,6 @@ public class SubActivity extends Activity implements OnClickListener{
         }
     }
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch(v.getId()) {
         }
     }

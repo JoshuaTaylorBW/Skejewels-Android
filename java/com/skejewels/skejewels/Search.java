@@ -14,6 +14,7 @@ import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridLayout.LayoutParams;
@@ -37,6 +39,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+
+
 
 import com.basiccalc.slidenerdtut.Skejewels;
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
@@ -77,6 +82,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
     private ArrayList<Integer> nameIds; //used for onclicklistener
     private RelativeLayout.LayoutParams checkParams, nicknameParams, actualNameParams;
     private int lastNicknameId;
+    final Context context = this;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -127,10 +133,13 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
                     Log.d("from search", friends[j] + "===" + ((TextView) view).getHint());
                     if(((TextView) view).getHint().toString().split("\\s")[1].equals(friends[j])){
                       areFriends = true;
-                      break;
                     }
                   }
                   if(areFriends){
+                    Intent intent = new Intent(getApplicationContext(), FriendsCalendar.class);
+                    intent.putExtra("friendsName", name.getText());
+                    intent.putExtra("friendsId", name.getHint().toString());
+                    startActivity(intent);
                     Log.d("from search", "you guys are friends");
                   }else{
                     Log.d("from search", "you guys are not friends");
@@ -156,6 +165,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         created = new CheckBox(Search.this);
         created.setTextColor(Color.parseColor("#000000"));
         created.setTextSize(20);
+        created.setOnClickListener(checks);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             created.setBackgroundTintList(this.getResources().getColorStateList(R.color.primaryColor));
             created.setButtonTintList(this.getResources().getColorStateList(R.color.primaryColor));
@@ -227,6 +237,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
           }
         }
         created.setHint(id);
+        created.setOnClickListener(checks);
         ids.add(Integer.toString(created.getId()));
         contentHolder.addView(created, checkParams);
 
@@ -243,7 +254,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         actualName.setTextAppearance(this, android.R.style.TextAppearance_Large);
         actualName.setTextColor(Color.parseColor("#000000"));
         actualName.setId(View.generateViewId());
-        actualName.setHint(id);
+        actualName.setHint("name " + id);
         ids.add(Integer.toString(actualName.getId()));
         nameIds.add(actualName.getId());
         actualName.setText(usersName);
@@ -272,7 +283,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
     public void onClick(View view) {
     }
 
-    public void addResults(){
+    public void Search(){
         checkParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);//Create new dynamic layout
         checkParams.setMargins(0, 0, 0, 0);//Set initial positions
         nicknameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);//Create new dynamic layout
@@ -280,16 +291,34 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
     }
 
 
+    View.OnClickListener checks=new View.OnClickListener() {
+      public void onClick(View view) {
 
-    public void onCheckBoxClicked(View view) {
+          final CheckBox realView = (CheckBox)view;
+          if(!realView.isChecked()) {
+              AlertDialog.Builder builder = new AlertDialog.Builder(context);
+              builder.setTitle("Do you really want to remove this friend?");
 
+              builder.setPositiveButton("yes",
+                      new DialogInterface.OnClickListener() {
+                          public void onClick(DialogInterface dialog,
+                                              int id) {
 
-        boolean checked = ((CheckBox) view).isChecked();
+                              realView.setChecked(false);
+                          }
+                      });
+              builder.setNegativeButton("no",
+                      new DialogInterface.OnClickListener() {
+                          public void onClick(DialogInterface dialog,
+                                              int id) {
 
-        switch(view.getId()) {
-        }
-    }
-
+                              realView.setChecked(true);
+                          }
+                      });
+              builder.create().show();
+          }
+      }
+    };
 
     class task extends AsyncTask<String, String, Void> {
         private ProgressDialog progressDialog = new ProgressDialog(Search.this);

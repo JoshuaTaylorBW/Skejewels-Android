@@ -1,4 +1,4 @@
-package com.basiccalc.slidenerdtut;
+package com.skejewels.skejewels;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
@@ -20,10 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
+import com.basiccalc.slidenerdtut.R;
 import com.skejewels.skejewels.IndividualDayActivity;
 import com.skejewels.skejewels.IndividualEventActivity;
 import com.skejewels.skejewels.Search;
@@ -49,58 +52,58 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class Skejewels extends ActionBarActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener {
-    private Toolbar toolbar;
-    private Button title;
-    private Button nextMonthButton, lastMonthButton;
-    private TextView searchText;
-    private static final String TAG = Skejewels.class.getSimpleName();
-    private ArrayList rows = new ArrayList<String>();
-    private String[] Maybe = new String[]{};
-    private int monthInt = 0;
-    private int yearInt = 2015;
-    private int alreadyBegun = 0;
-    private int dayToOpen = 0;//which day do we open when moving to an individual day page.
-    private int length = 10; //length of feed. INITIALLY SET TO 10
+public class FriendsCalendar extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener, AdapterView.OnItemSelectedListener {
+  private String friendsName = "Terrence Mullen";
+  private String friendsId = "0";
+  private Toolbar toolbar;
+  private Button title;
+  private Button nextMonthButton, lastMonthButton;
+  private TextView searchText;
+  private static final String TAG = FriendsCalendar.class.getSimpleName();
+  private ArrayList rows = new ArrayList<String>();
+  private String[] Maybe = new String[]{};
+  private int monthInt = 0;
+  private int yearInt = 2015;
+  private int alreadyBegun = 0;
+  private int dayToOpen = 0;//which day do we open when moving to an individual day page.
+  private int length = 10; //length of feed. INITIALLY SET TO 10
+  DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+  Date date;
+  String dateString;
 
-    DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-    Date date;
-    String dateString;
+  public void onCreate(Bundle savedInstanceState){
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_friend_calendar);
 
+      Bundle extras = getIntent().getExtras();
+      if (extras != null) {
+          friendsName = extras.getString("friendsName", "");
+          friendsId = extras.getString("friendsId", "1");
+      }
+      toolbar=(Toolbar)findViewById(R.id.app_bar);
+      setSupportActionBar(toolbar);
+      title = (Button) findViewById(R.id.homeButton);
+      title.setOnClickListener(this);
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+      searchText = (TextView) findViewById(R.id.search_text);
+      searchText.setOnClickListener(this);
 
-        toolbar=(Toolbar)findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
+      nextMonthButton = (Button) findViewById(R.id.nextMonthClickable);
+      nextMonthButton.setOnClickListener(this);
+      lastMonthButton= (Button) findViewById(R.id.lastMonthClickable);
+      lastMonthButton.setOnClickListener(this);
 
-        title = (Button) findViewById(R.id.homeButton);
-        title.setOnClickListener(this);
+      new task().execute();
+      //new getSpread().execute();
 
-        searchText = (TextView) findViewById(R.id.search_text);
-        searchText.setOnClickListener(this);
-
-        nextMonthButton = (Button) findViewById(R.id.nextMonthClickable);
-        nextMonthButton.setOnClickListener(this);
-        lastMonthButton= (Button) findViewById(R.id.lastMonthClickable);
-        lastMonthButton.setOnClickListener(this);
-
-
-
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-
-        new task().execute();
-        new getSpread().execute();
+      NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
+              getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+      drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+    }
+    public void onClick(View v) {
 
     }
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+
     //CALENDAR
         public void onCreateCalendar(){
             getHeaders();
@@ -174,7 +177,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
                     monthFullName = "December";
                     break;
             }
-            month.setText(monthFullName);
+            month.setText(friendsName.split(" ")[0] + "\'s " + monthFullName);
             Typeface myCustomTypeFace = Typeface.createFromAsset(getAssets(), "fonts/nexa_font.otf");
 
             month.setTypeface(myCustomTypeFace);
@@ -250,9 +253,6 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             //        }
 
             return super.onOptionsItemSelected(item);
-        }
-        public void onFragmentInteraction(View v){
-            Log.d("frag", Integer.toString(v.getId()));
         }
 
         public void nextMonth(){
@@ -1240,9 +1240,10 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             }
         }
     //CALENDAR
+
     class task extends AsyncTask<String, String, Void>
         {
-            private ProgressDialog progressDialog = new ProgressDialog(Skejewels.this);
+            private ProgressDialog progressDialog = new ProgressDialog(FriendsCalendar.this);
             InputStream is = null ;
             String result = "";
             protected void onPreExecute() {
@@ -1259,7 +1260,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             }
             protected Void doInBackground(String... params){
 
-                String url_select="http://skejewels.com/Android/printDaysOfMonth.php?Month=" + (monthInt + 1) + "&Year=" + yearInt;
+                String url_select="http://skejewels.com/Android/FriendsEvents.php?Month=" + (monthInt + 1) + "&Year=" + yearInt + "&friendId=" + friendsId.split(" ")[1];
                 Log.d(TAG, "" + yearInt);
 
                 HttpClient httpClient = new DefaultHttpClient();
@@ -1325,256 +1326,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
                         rebuildCalendar();
                     }
 
-                    onSpreadCreate();
-
-                }catch(Exception e){
-                    Log.e("log_tag", "Error parsing data "+e.toString());
-                }
-            }
-        }
-    //SPREAD
-        private TextView spreadCardUserNameAndCard, spreadCardEvent, spreadCardEventTime, spreadCardLikeAmount, spreadCardCommentAmount, spreadCardLikeThisAnd;
-        private Button spreadCardLikeButton, spreadCardCommentButton;
-        private RelativeLayout holder;
-        private int lastCardId = 0;//lastCardId is the id of the card that was just built. changes in makeSpreadCard method
-        private int nextCardId = 0;
-        private int repeater = 0;
-        private RelativeLayout.LayoutParams holderParams, eventParams, eventTimeParams, likeButtonParams, commentButtonParams, likeThisAndParams, commentAmountParams, likeAmountParams;
-        public void onSpreadCreate(){
-            holder = (RelativeLayout) findViewById(R.id.spreadHolder);
-            lastCardId = R.id.SpreadCard1;
-        }
-        /*
-        cardId = the ID of the card directly above the one being built
-
-        */
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        public void makeSpreadCard(int cardId, int usersId, String eventName, String usersName, int commentAmount,
-                                   int likeAmount, int eventId, String eventBeginDate, String eventBegintime, String eventEndDate, String eventEndTime){
-            //Create Params
-                holderParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                eventParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                eventTimeParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                likeButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                commentButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                likeThisAndParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                commentAmountParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                likeAmountParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            //Add Spread Card and userName
-                holderParams.setMargins(0, 50, 0, 0);
-                holderParams.addRule(RelativeLayout.ALIGN_LEFT, R.id.calendar);
-                holderParams.addRule(RelativeLayout.ALIGN_START, R.id.calendar);
-                holderParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.calendar);
-                holderParams.addRule(RelativeLayout.ALIGN_END, R.id.calendar);
-                holderParams.addRule(RelativeLayout.BELOW, cardId);
-
-                spreadCardUserNameAndCard = new TextView(Skejewels.this);
-                spreadCardUserNameAndCard.setTypeface(null, Typeface.BOLD);
-                spreadCardUserNameAndCard.setTextColor(Color.parseColor("#009688"));
-                spreadCardUserNameAndCard.setGravity(Gravity.CENTER_HORIZONTAL);
-                spreadCardUserNameAndCard.setText(usersName);
-                spreadCardUserNameAndCard.setPadding(0, 0, 0, 450);
-                spreadCardUserNameAndCard.setElevation(6);
-                spreadCardUserNameAndCard.setBackgroundColor(Color.parseColor("#ffffff"));
-                spreadCardUserNameAndCard.setId(View.generateViewId());
-                Log.d(TAG, "indirectly related " + Integer.toString(spreadCardUserNameAndCard.getId()));
-                if (cardId == 2131558595 && repeater == 0) {
-                    lastCardId = spreadCardUserNameAndCard.getId();
-                    repeater++;
-                }else{
-                    lastCardId = spreadCardUserNameAndCard.getId();
-
-                }
-
-            holder.addView(spreadCardUserNameAndCard, holderParams);
-
-            //Add Event Text
-                eventParams.setMargins(0, 120, 0, 0);
-            eventParams.addRule(RelativeLayout.ALIGN_TOP, spreadCardUserNameAndCard.getId());
-
-            spreadCardEvent = new TextView(Skejewels.this);
-                spreadCardEvent.setGravity(Gravity.CENTER_HORIZONTAL);
-                spreadCardEvent.setText("Is Going to " + eventName + " on " + eventBeginDate);
-                        spreadCardEvent.setTextColor(Color.parseColor("#000000"));
-                spreadCardEvent.setElevation(7);
-                spreadCardEvent.setId(View.generateViewId());
-                holder.addView(spreadCardEvent, eventParams);
-
-            //Add Event Time Text
-                eventTimeParams.setMargins(0, 80, 0, 0);
-                eventTimeParams.addRule(RelativeLayout.ALIGN_TOP, spreadCardEvent.getId());
-
-                spreadCardEventTime = new TextView(Skejewels.this);
-                spreadCardEventTime.setGravity(Gravity.CENTER_HORIZONTAL);
-                spreadCardEventTime.setText(eventBegintime + " - " + eventEndTime);
-                        spreadCardEventTime.setTextColor(Color.parseColor("#000000"));
-                spreadCardEventTime.setElevation(7);
-                spreadCardEventTime.setId(View.generateViewId());
-                holder.addView(spreadCardEventTime, eventTimeParams);
-
-            //Like This And Text
-                likeThisAndParams.setMargins(0, 0, 0, 0);
-                likeThisAndParams.addRule(RelativeLayout.ALIGN_BOTTOM, spreadCardUserNameAndCard.getId());
-                likeThisAndParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-
-                spreadCardLikeThisAnd = new TextView(Skejewels.this);
-                spreadCardLikeThisAnd.setGravity(Gravity.CENTER_HORIZONTAL);
-                if(commentAmount > 0 && likeAmount > 0){
-                    spreadCardLikeThisAnd.setText("like this and");
-                }else if(likeAmount > 0 && commentAmount == 0){
-                    spreadCardLikeThisAnd.setText("like this");
-                }else{
-                    spreadCardLikeThisAnd.setText("");
-                }
-                spreadCardLikeThisAnd.setTextColor(Color.parseColor("#000000"));
-                spreadCardLikeThisAnd.setTextSize(11);
-                spreadCardLikeThisAnd.setElevation(7);
-                spreadCardLikeThisAnd.setId(View.generateViewId());
-                holder.addView(spreadCardLikeThisAnd, likeThisAndParams);
-
-            //Add Like Button
-                    likeButtonParams.setMargins(0, 0, 0, 0);
-                    likeButtonParams.addRule(RelativeLayout.LEFT_OF, spreadCardLikeThisAnd.getId());
-                    likeButtonParams.addRule(RelativeLayout.BELOW, spreadCardEventTime.getId());
-
-                    spreadCardLikeButton = new Button(Skejewels.this);
-                    spreadCardLikeButton.setText("Like");
-                    spreadCardLikeButton.setBackgroundColor(Color.TRANSPARENT);
-                    spreadCardLikeButton.setTextColor(Color.parseColor("#009688"));
-                    spreadCardLikeButton.setElevation(12);
-                    spreadCardLikeButton.setPadding(80,0,80,0);
-
-                    holder.addView(spreadCardLikeButton, likeButtonParams);
-
-            //Add Comment Button
-                    commentButtonParams.setMargins(0, 0, 0, 0);
-                    commentButtonParams.addRule(RelativeLayout.RIGHT_OF, spreadCardLikeThisAnd.getId());
-                    commentButtonParams.addRule(RelativeLayout.BELOW, spreadCardEventTime.getId());
-
-                    spreadCardCommentButton = new Button(Skejewels.this);
-                    spreadCardCommentButton.setText("Comment");
-                    spreadCardCommentButton.setBackgroundColor(Color.TRANSPARENT);
-                    spreadCardCommentButton.setTextColor(Color.parseColor("#009688"));
-                    spreadCardCommentButton.setElevation(12);
-                    spreadCardCommentButton.setPadding(80,0,80,0);
-                    holder.addView(spreadCardCommentButton, commentButtonParams);
-
-
-            //Like Amount Text
-                if(likeAmount > 0){
-                    likeAmountParams.setMargins(0, 0, 0, 0);
-                    likeAmountParams.addRule(RelativeLayout.ALIGN_BOTTOM, spreadCardUserNameAndCard.getId());
-                    likeAmountParams.addRule(RelativeLayout.LEFT_OF, spreadCardLikeThisAnd.getId());
-
-                    spreadCardLikeAmount = new TextView(Skejewels.this);
-                    spreadCardLikeAmount.setGravity(Gravity.RIGHT);
-                    if(likeAmount > 1){
-                        spreadCardLikeAmount.setText(likeAmount + " people ");
-                    }else{
-                        spreadCardLikeAmount.setText(likeAmount + " person ");
-                    }
-                    spreadCardLikeAmount.setTextColor(Color.parseColor("#009688"));
-                    spreadCardLikeAmount.setTextSize(11);
-                    spreadCardLikeAmount.setElevation(7);
-                    spreadCardLikeAmount.setId(View.generateViewId());
-                    holder.addView(spreadCardLikeAmount, likeAmountParams);
-                }
-
-            //Comment Amount Text
-                if(commentAmount > 0){
-                    commentAmountParams.setMargins(0, 0, 0, 0);
-                    commentAmountParams.addRule(RelativeLayout.ALIGN_BOTTOM, spreadCardUserNameAndCard.getId());
-                    commentAmountParams.addRule(RelativeLayout.RIGHT_OF, spreadCardLikeThisAnd.getId());
-
-                    spreadCardCommentAmount = new TextView(Skejewels.this);
-                    spreadCardCommentAmount.setGravity(Gravity.RIGHT);
-                    spreadCardCommentAmount.setText(" " + commentAmount + " comments");
-                    spreadCardCommentAmount.setTextColor(Color.parseColor("#009688"));
-                    spreadCardCommentAmount.setTextSize(11);
-                    spreadCardCommentAmount.setElevation(7);
-                    spreadCardCommentAmount.setId(View.generateViewId());
-                    holder.addView(spreadCardCommentAmount, commentAmountParams);
-                }
-
-
-        }
-
-    //SPREAD
-    class getSpread extends AsyncTask<String, String, Void>
-         {
-            private ProgressDialog progressDialog = new ProgressDialog(Skejewels.this);
-            InputStream is = null ;
-            String result = "";
-            protected void onPreExecute() {
-                progressDialog.setMessage("Fetching data...");
-                progressDialog.show();
-                progressDialog.setOnCancelListener(new OnCancelListener() {
-                    public void onCancel(DialogInterface arg0) {
-                        getSpread.this.cancel(true);
-                    }
-                });
-            }
-            protected Void doInBackground(String... params){
-
-                String url_select="http://skejewels.com/Android/MakeAndroidFeed.php?length=" + length;
-                Log.d(TAG, "" + yearInt);
-
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(url_select);
-
-
-                ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
-
-                try {
-                    httpPost.setEntity(new UrlEncodedFormEntity(param));
-
-                    HttpResponse httpResponse = httpClient.execute(httpPost);
-                    HttpEntity httpEntity = httpResponse.getEntity();
-
-                    //read content
-                    is =  httpEntity.getContent();
-
-
-
-
-                } catch (Exception e) {
-
-                    Log.e("log_tag", "Error in http connection " + e.toString());
-                    //Toast.makeText(Skejewels.this, "Please Try Again", Toast.LENGTH_LONG).show();
-                }
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    StringBuilder sb = new StringBuilder();
-                    String line = "";
-                    while((line=br.readLine())!=null)
-                    {
-                        sb.append(line + "\n");
-                    }
-                    is.close();
-                    result=sb.toString();
-
-                    Log.d(TAG, "got to here now!!!! " + result);
-
-                } catch (Exception e) {
-                    Log.e("log_tag", "Error converting result "+e.toString());
-                }
-
-                return null;
-
-            }
-            protected void onPostExecute(Void v){
-                try {
-                    String[] indivs = result.split("doubledtumbleswillfumblemybumblebee");
-                    for (int i = 1; i < indivs.length - 1; i++) {
-                       String[] details = indivs[i].split("pampurppampurpampurp");
-                       makeSpreadCard(lastCardId, Integer.parseInt(details[1]), details[2], details[3], Integer.parseInt(details[4]), Integer.parseInt(details[5]), Integer.parseInt(details[6]), details[7],details[8],details[9],details[10]);
-                       String eventName = indivs[i];
-                       eventName = eventName.replace("\"", "");
-                    }
-
-                    this.progressDialog.dismiss();
+                    // onSpreadCreate();
 
                 }catch(Exception e){
                     Log.e("log_tag", "Error parsing data "+e.toString());
@@ -1582,155 +1334,21 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             }
         }
 
-    public void onClick(View v) {
-        checkIfContentsHeadersClicked(v);
-        switch(v.getId()) {
-            case R.id.homeButton:
-                Log.d(TAG,  "GOT TO HERE :) :) :)");
-                alreadyBegun = 0;
-                // new task().execute();
-                Intent intent = new Intent(this, Skejewels.class);
-                startActivity(intent);
-
-                break;
-            case R.id.nextMonthClickable:
-                rows.clear();
-                nextMonth();
-
-                Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
-
-                break;
-            case R.id.search_text:
-                Intent intent2 = new Intent(this, Search.class);
-                startActivity(intent2);
-                break;
-            case R.id.lastMonthClickable:
-                lastMonth();
-                break;
-            case R.id.header1:
-                goToIndividualDay((String) header1.getText());
-                break;
-            case R.id.header2:
-                goToIndividualDay((String) header2.getText());
-                break;
-            case R.id.header3:
-                goToIndividualDay((String) header3.getText());
-                break;
-            case R.id.header4:
-                goToIndividualDay((String) header4.getText());
-                break;
-            case R.id.header5:
-                goToIndividualDay((String) header5.getText());
-                break;
-            case R.id.header6:
-                goToIndividualDay((String) header6.getText());
-                break;
-            case R.id.header7:
-                goToIndividualDay((String) header7.getText());
-                break;
-            case R.id.header8:
-                goToIndividualDay((String) header8.getText());
-                break;
-            case R.id.header9:
-                goToIndividualDay((String) header9.getText());
-                break;
-            case R.id.header10:
-                goToIndividualDay((String) header10.getText());
-                break;
-            case R.id.header11:
-                goToIndividualDay((String) header11.getText());
-                break;
-            case R.id.header12:
-                goToIndividualDay((String) header12.getText());
-                break;
-            case R.id.header13:
-                goToIndividualDay((String) header13.getText());
-                break;
-            case R.id.header14:
-                goToIndividualDay((String) header14.getText());
-                break;
-            case R.id.header15:
-                goToIndividualDay((String) header15.getText());
-                break;
-            case R.id.header16:
-                goToIndividualDay((String) header16.getText());
-                break;
-            case R.id.header17:
-                goToIndividualDay((String) header17.getText());
-                break;
-            case R.id.header18:
-                goToIndividualDay((String) header18.getText());
-                break;
-            case R.id.header19:
-                goToIndividualDay((String) header19.getText());
-                break;
-            case R.id.header20:
-                goToIndividualDay((String) header20.getText());
-                break;
-            case R.id.header21:
-                goToIndividualDay((String) header21.getText());
-                break;
-            case R.id.header22:
-                goToIndividualDay((String) header22.getText());
-                break;
-            case R.id.header23:
-                goToIndividualDay((String) header23.getText());
-                break;
-            case R.id.header24:
-                goToIndividualDay((String) header24.getText());
-                break;
-            case R.id.header25:
-                goToIndividualDay((String) header25.getText());
-                break;
-            case R.id.header26:
-                goToIndividualDay((String) header26.getText());
-                break;
-            case R.id.header27:
-                goToIndividualDay((String) header27.getText());
-                break;
-            case R.id.header28:
-                goToIndividualDay((String) header28.getText());
-                break;
-            case R.id.header29:
-                goToIndividualDay((String) header29.getText());
-                break;
-            case R.id.header30:
-                goToIndividualDay((String) header30.getText());
-                break;
-            case R.id.header31:
-                goToIndividualDay((String) header31.getText());
-                break;
-            case R.id.header32:
-                goToIndividualDay((String) header32.getText());
-                break;
-            case R.id.header33:
-                goToIndividualDay((String) header33.getText());
-                break;
-            case R.id.header34:
-                goToIndividualDay((String) header34.getText());
-                break;
-            case R.id.header35:
-                goToIndividualDay((String) header35.getText());
-                break;
-            case R.id.header36:
-                goToIndividualDay((String) header36.getText());
-                break;
-            case R.id.header37:
-                goToIndividualDay((String) header37.getText());
-                break;
-            case R.id.header38:
-                goToIndividualDay((String) header38.getText());
-                break;
-            case R.id.header39:
-                goToIndividualDay((String) header39.getText());
-                break;
-            case R.id.header40:
-                goToIndividualDay((String) header40.getText());
-                break;
-
-        }
+    //SPREAD
+    public void onFragmentInteraction(View v) {
 
     }
+
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
 
     public boolean onTouch(View v, MotionEvent event) {
         return false;
