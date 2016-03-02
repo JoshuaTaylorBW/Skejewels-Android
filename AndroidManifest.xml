@@ -119,6 +119,12 @@
         android:configChanges="orientation"
         android:screenOrientation="portrait">
     </activity>
+        <activity
+            android:name="com.skejewels.skejewels.FriendsIndividualDayActivity"
+            android:label="@string/activity_friend_individual_day"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

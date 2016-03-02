@@ -101,7 +101,152 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
       drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
     }
     public void onClick(View v) {
+        checkIfContentsHeadersClicked(v);
+        switch(v.getId()) {
+            case R.id.homeButton:
+                Log.d(TAG,  "GOT TO HERE :) :) :)");
+                alreadyBegun = 0;
+                // new task().execute();
+                Intent intent = new Intent(this, FriendsCalendar.class);
+                startActivity(intent);
 
+                break;
+            case R.id.nextMonthClickable:
+                rows.clear();
+                nextMonth();
+
+                Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
+
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.lastMonthClickable:
+                lastMonth();
+                break;
+            case R.id.header1:
+                goToIndividualDay((String) header1.getText());
+                break;
+            case R.id.header2:
+                goToIndividualDay((String) header2.getText());
+                break;
+            case R.id.header3:
+                goToIndividualDay((String) header3.getText());
+                break;
+            case R.id.header4:
+                goToIndividualDay((String) header4.getText());
+                break;
+            case R.id.header5:
+                goToIndividualDay((String) header5.getText());
+                break;
+            case R.id.header6:
+                goToIndividualDay((String) header6.getText());
+                break;
+            case R.id.header7:
+                goToIndividualDay((String) header7.getText());
+                break;
+            case R.id.header8:
+                goToIndividualDay((String) header8.getText());
+                break;
+            case R.id.header9:
+                goToIndividualDay((String) header9.getText());
+                break;
+            case R.id.header10:
+                goToIndividualDay((String) header10.getText());
+                break;
+            case R.id.header11:
+                goToIndividualDay((String) header11.getText());
+                break;
+            case R.id.header12:
+                goToIndividualDay((String) header12.getText());
+                break;
+            case R.id.header13:
+                goToIndividualDay((String) header13.getText());
+                break;
+            case R.id.header14:
+                goToIndividualDay((String) header14.getText());
+                break;
+            case R.id.header15:
+                goToIndividualDay((String) header15.getText());
+                break;
+            case R.id.header16:
+                goToIndividualDay((String) header16.getText());
+                break;
+            case R.id.header17:
+                goToIndividualDay((String) header17.getText());
+                break;
+            case R.id.header18:
+                goToIndividualDay((String) header18.getText());
+                break;
+            case R.id.header19:
+                goToIndividualDay((String) header19.getText());
+                break;
+            case R.id.header20:
+                goToIndividualDay((String) header20.getText());
+                break;
+            case R.id.header21:
+                goToIndividualDay((String) header21.getText());
+                break;
+            case R.id.header22:
+                goToIndividualDay((String) header22.getText());
+                break;
+            case R.id.header23:
+                goToIndividualDay((String) header23.getText());
+                break;
+            case R.id.header24:
+                goToIndividualDay((String) header24.getText());
+                break;
+            case R.id.header25:
+                goToIndividualDay((String) header25.getText());
+                break;
+            case R.id.header26:
+                goToIndividualDay((String) header26.getText());
+                break;
+            case R.id.header27:
+                goToIndividualDay((String) header27.getText());
+                break;
+            case R.id.header28:
+                goToIndividualDay((String) header28.getText());
+                break;
+            case R.id.header29:
+                goToIndividualDay((String) header29.getText());
+                break;
+            case R.id.header30:
+                goToIndividualDay((String) header30.getText());
+                break;
+            case R.id.header31:
+                goToIndividualDay((String) header31.getText());
+                break;
+            case R.id.header32:
+                goToIndividualDay((String) header32.getText());
+                break;
+            case R.id.header33:
+                goToIndividualDay((String) header33.getText());
+                break;
+            case R.id.header34:
+                goToIndividualDay((String) header34.getText());
+                break;
+            case R.id.header35:
+                goToIndividualDay((String) header35.getText());
+                break;
+            case R.id.header36:
+                goToIndividualDay((String) header36.getText());
+                break;
+            case R.id.header37:
+                goToIndividualDay((String) header37.getText());
+                break;
+            case R.id.header38:
+                goToIndividualDay((String) header38.getText());
+                break;
+            case R.id.header39:
+                goToIndividualDay((String) header39.getText());
+                break;
+            case R.id.header40:
+                goToIndividualDay((String) header40.getText());
+                break;
+
+        }
     }
 
     //CALENDAR
@@ -1232,7 +1377,9 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
             if (dayOfMonth.equals("") || dayOfMonth == null){
 
             }else {
-                Intent i = new Intent(getApplicationContext(), IndividualDayActivity.class);
+                Intent i = new Intent(getApplicationContext(), FriendsIndividualDayActivity.class);
+                i.putExtra("friendsName", friendsName);
+                i.putExtra("friendsId", friendsId);
                 i.putExtra("Day", Integer.parseInt(dayOfMonth));
                 i.putExtra("Month", monthInt + 1);
                 i.putExtra("Year", yearInt);
@@ -1261,7 +1408,7 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
             protected Void doInBackground(String... params){
 
                 String url_select="http://skejewels.com/Android/FriendsEvents.php?Month=" + (monthInt + 1) + "&Year=" + yearInt + "&friendId=" + friendsId.split(" ")[1];
-                Log.d(TAG, "" + yearInt);
+                Log.d(TAG, "" + url_select);
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(url_select);

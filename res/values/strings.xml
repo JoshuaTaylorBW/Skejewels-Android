@@ -21,6 +21,7 @@
     <string name="activity_sign_up"></string>
     <string name="activity_search"></string>
     <string name="activity_friend_calendar"></string>
+    <string name="activity_friend_individual_day"></string>
 
     <string-array name="repeatarray">
         <item>Once</item>
