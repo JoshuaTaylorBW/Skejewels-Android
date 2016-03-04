@@ -1260,7 +1260,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             protected Void doInBackground(String... params){
 
                 String url_select="http://skejewels.com/Android/printDaysOfMonth.php?Month=" + (monthInt + 1) + "&Year=" + yearInt;
-                Log.d(TAG, "" + yearInt);
+                Log.d(TAG, "" + url_select);
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(url_select);

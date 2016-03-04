@@ -22,6 +22,7 @@
     <string name="activity_search"></string>
     <string name="activity_friend_calendar"></string>
     <string name="activity_friend_individual_day"></string>
+    <string name="activity_friend_individual_event"></string>
 
     <string-array name="repeatarray">
         <item>Once</item>
