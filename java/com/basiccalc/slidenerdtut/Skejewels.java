@@ -44,6 +44,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -61,7 +62,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
     private int yearInt = 2015;
     private int alreadyBegun = 0;
     private int dayToOpen = 0;//which day do we open when moving to an individual day page.
-    private int length = 10; //length of feed. INITIALLY SET TO 10
+    private int spreadLength = 10; //length of feed. INITIALLY SET TO 10
 
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     Date date;
@@ -1518,7 +1519,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             }
             protected Void doInBackground(String... params){
 
-                String url_select="http://skejewels.com/Android/MakeAndroidFeed.php?length=" + length;
+                String url_select="http://skejewels.com/Android/MakeAndroidFeed.php?length=" + spreadLength;
                 Log.d(TAG, "" + yearInt);
 
                 HttpClient httpClient = new DefaultHttpClient();
@@ -1555,7 +1556,8 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
                     is.close();
                     result=sb.toString();
 
-                    Log.d(TAG, "got to here now!!!! " + result);
+
+
 
                 } catch (Exception e) {
                     Log.e("log_tag", "Error converting result "+e.toString());
@@ -1566,11 +1568,14 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             }
             protected void onPostExecute(Void v){
                 try {
-                    String[] indivs = result.split("doubledtumbleswillfumblemybumblebee");
-                    for (int i = 1; i < indivs.length - 1; i++) {
-                       String[] details = indivs[i].split("pampurppampurpampurp");
-                       makeSpreadCard(lastCardId, Integer.parseInt(details[1]), details[2], details[3], Integer.parseInt(details[4]), Integer.parseInt(details[5]), Integer.parseInt(details[6]), details[7],details[8],details[9],details[10]);
-                       String eventName = indivs[i];
+                    String[] individual = result.split("doubledtumbleswillfumblemybumblebee");
+                    Log.d(TAG, "got to the feed now!!!! " + result);
+
+                    for (int i = 1; i < individual.length  - 1; i++) {
+                       String[] details = individual[i].split("pampurppampurpampurp");
+                        Log.d(TAG, "got to the feed now!!!! " + Arrays.toString(details));
+                       makeSpreadCard(lastCardId, Integer.parseInt(details[1]), details[2], details[3], Integer.parseInt(details[4]), Integer.parseInt(details[5]), Integer.parseInt(details[6]), details[8],details[7],details[10],details[9]);
+                       String eventName = individual[i];
                        eventName = eventName.replace("\"", "");
                     }
 
