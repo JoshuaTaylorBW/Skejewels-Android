@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.skejewels.skejewels.FriendRequests;
 import com.skejewels.skejewels.IndividualDayActivity;
 import com.skejewels.skejewels.IndividualEventActivity;
 import com.skejewels.skejewels.Search;
@@ -1608,6 +1609,10 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             case R.id.search_text:
                 Intent intent2 = new Intent(this, Search.class);
                 startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Intent intent3 = new Intent(this, FriendRequests.class);
+                startActivity(intent3);
                 break;
             case R.id.lastMonthClickable:
                 lastMonth();

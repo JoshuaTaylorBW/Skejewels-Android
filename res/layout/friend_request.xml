@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#F1F2F3">
+
+    <include
+        layout="@layout/app_bar"
+        android:id="@+id/include"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/homeButton"
+        android:layout_above="@+id/EventExplanation"
+        android:layout_centerHorizontal="true"
+        style="?android:attr/borderlessButtonStyle"
+        android:width="0dp"
+        android:height="0px"
+        android:maxWidth="0dp"
+        android:maxHeight="0dp"
+        android:visibility="visible"
+
+        android:background="@color/primaryColor" />
+
+    <ImageView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/imageView"
+android:src="@drawable/ic_lines"
+android:layout_marginTop="14dp"
+android:layout_marginLeft="18dp"
+android:layout_marginStart="18dp"
+android:layout_alignParentTop="true"
+android:layout_alignParentLeft="true"
+android:layout_alignParentStart="true"
+android:paddingTop="2dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/jewelButton"
+        android:src="@drawable/jewel"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/homeButton"
+        android:layout_alignEnd="@+id/homeButton"
+        android:layout_alignLeft="@+id/homeButton"
+        android:layout_alignStart="@+id/homeButton"
+        android:layout_alignBottom="@+id/include" />
+
+    <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="40dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/scrollView3"
+            android:layout_alignParentStart="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jeremy Jasper"
+            android:id="@+id/textView4"
+            android:textColor="#009688"
+            android:background="#ffffff"
+            android:paddingTop="2dp"
+            android:gravity="center"
+            android:paddingBottom="125dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:elevation="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wants to be your  \n friend"
+            android:id="@+id/textView5"
+            android:textColor="#000000"
+            android:layout_alignTop="@+id/textView6"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:elevation="2dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="\@JJasp"
+            android:id="@+id/textView6"
+            android:layout_alignTop="@+id/textView4"
+            android:layout_centerHorizontal="true"
+            android:textColor="#88A5C4"
+            android:layout_marginTop="21dp"
+            android:textSize="11dp"
+            android:elevation="2dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Accept "
+                android:id="@+id/button"
+                android:layout_below="@+id/textView5"
+                android:layout_alignStart="@+id/textView5"
+                android:layout_alignEnd="@id/textView5"
+                android:layout_marginLeft="20dp"
+                android:background="@color/primaryColor" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decline"
+                android:id="@+id/button2"
+                android:layout_alignBottom="@+id/button"
+                android:layout_alignEnd="@+id/textView4"
+                android:layout_marginRight="30dp"
+                android:layout_below="@+id/textView5"
+                android:background="@drawable/button_border"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:paddingRight="15dp"
+                android:textColor="#494949" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jeremy Jasper"
+                android:id="@+id/textView12"
+                android:textColor="#009688"
+                android:background="#ffffff"
+                android:paddingTop="2dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/textView4"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:paddingBottom="125dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:elevation="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="\@JJasp"
+                android:id="@+id/textView7"
+                android:textColor="#88A5C4"
+                android:layout_marginTop="21dp"
+                android:textSize="11dp"
+                android:elevation="2dp"
+                android:layout_alignTop="@+id/textView12"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wants to be your  \n friend"
+                android:id="@+id/textView8"
+                android:textColor="#000000"
+                android:gravity="center"
+                android:elevation="2dp"
+                android:layout_below="@+id/textView7"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decline"
+                android:id="@+id/button5"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/button_border"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:paddingRight="15dp"
+                android:textColor="#494949"
+                android:layout_below="@+id/textView8"
+                android:layout_alignStart="@+id/button2" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Accept "
+                android:id="@+id/button4"
+                android:layout_below="@+id/textView8"
+                android:layout_alignStart="@+id/textView8"
+                android:layout_alignEnd="@id/textView8"
+                android:layout_marginLeft="20dp"
+                android:background="@color/primaryColor" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jeremy Jasper"
+                android:id="@+id/textView17"
+                android:textColor="#009688"
+                android:background="#ffffff"
+                android:paddingTop="2dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/textView12"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:paddingBottom="125dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:elevation="2dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="\@JJasp"
+                android:id="@+id/textView18"
+                android:textColor="#88A5C4"
+                android:layout_marginTop="21dp"
+                android:textSize="11dp"
+                android:elevation="2dp"
+                android:layout_alignTop="@+id/textView17"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wants to be your  \n friend"
+                android:id="@+id/textView19"
+                android:textColor="#000000"
+                android:gravity="center"
+                android:elevation="2dp"
+                android:layout_below="@+id/textView18"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decline"
+                android:id="@+id/button7"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/button_border"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:paddingRight="15dp"
+                android:textColor="#494949"
+                android:layout_below="@+id/textView19"
+                android:layout_alignStart="@+id/button2" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Accept "
+                android:id="@+id/button8"
+                android:layout_below="@+id/textView19"
+                android:layout_alignStart="@+id/textView8"
+                android:layout_alignEnd="@id/textView8"
+                android:layout_marginLeft="20dp"
+                android:background="@color/primaryColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jeremy Jasper"
+                android:id="@+id/textView20"
+                android:textColor="#009688"
+                android:background="#ffffff"
+                android:paddingTop="2dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/textView17"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:paddingBottom="125dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:elevation="2dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="\@JJasp"
+                android:id="@+id/textView21"
+                android:textColor="#88A5C4"
+                android:layout_marginTop="21dp"
+                android:textSize="11dp"
+                android:elevation="2dp"
+                android:layout_alignTop="@+id/textView20"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wants to be your  \n friend"
+                android:id="@+id/textView22"
+                android:textColor="#000000"
+                android:gravity="center"
+                android:elevation="2dp"
+                android:layout_below="@+id/textView21"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decline"
+                android:id="@+id/button9"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/button_border"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:paddingRight="15dp"
+                android:textColor="#494949"
+                android:layout_below="@+id/textView22"
+                android:layout_alignStart="@+id/button2" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Accept "
+                android:id="@+id/button10"
+                android:layout_below="@+id/textView22"
+                android:layout_alignStart="@+id/textView8"
+                android:layout_alignEnd="@id/textView8"
+                android:layout_marginLeft="20dp"
+                android:background="@color/primaryColor" />
+        </RelativeLayout>
+</ScrollView>
+
+
+</RelativeLayout>
