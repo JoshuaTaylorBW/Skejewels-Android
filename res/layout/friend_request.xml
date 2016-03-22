@@ -5,7 +5,7 @@
 
     <include
         layout="@layout/app_bar"
-        android:id="@+id/include"
+        android:id="@+id/app_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -50,7 +50,7 @@ android:paddingTop="2dp" />
         android:layout_alignEnd="@+id/homeButton"
         android:layout_alignLeft="@+id/homeButton"
         android:layout_alignStart="@+id/homeButton"
-        android:layout_alignBottom="@+id/include" />
+        android:layout_alignBottom="@+id/app_bar" />
 
     <ScrollView
             android:layout_width="wrap_content"
