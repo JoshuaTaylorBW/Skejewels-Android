@@ -3,7 +3,6 @@ package com.skejewels.skejewels;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +13,7 @@ import com.basiccalc.slidenerdtut.R;
 /**
  * Created by j80ma_000 on 3/20/2016.
  */
-public class FriendRequests extends AppCompatActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener, AdapterViewCompat.OnItemSelectedListener {
+public class FriendRequests extends AppCompatActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener {
     private Toolbar toolbar;
     private int userId;
     
@@ -33,7 +32,6 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
     public void onFragmentInteraction(View v) {
 
     }
-
     public void onItemSelected(AdapterViewCompat<?> parent, View view, int position, long id) {
 
     }
@@ -132,7 +130,6 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
                 }
             }
         }
-
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
     }

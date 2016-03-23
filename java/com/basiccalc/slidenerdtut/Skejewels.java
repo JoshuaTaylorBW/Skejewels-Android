@@ -55,7 +55,7 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
     private Toolbar toolbar;
     private Button title;
     private Button nextMonthButton, lastMonthButton;
-    private TextView searchText;
+    private TextView searchText, requestText;
     private static final String TAG = Skejewels.class.getSimpleName();
     private ArrayList rows = new ArrayList<String>();
     private String[] Maybe = new String[]{};
@@ -82,6 +82,9 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
 
         searchText = (TextView) findViewById(R.id.search_text);
         searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
 
         nextMonthButton = (Button) findViewById(R.id.nextMonthClickable);
         nextMonthButton.setOnClickListener(this);
@@ -1602,15 +1605,14 @@ public class Skejewels extends ActionBarActivity implements NavigationDrawerFrag
             case R.id.nextMonthClickable:
                 rows.clear();
                 nextMonth();
-
                 Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
-
                 break;
             case R.id.search_text:
                 Intent intent2 = new Intent(this, Search.class);
                 startActivity(intent2);
                 break;
             case R.id.request_text:
+                Log.d(TAG, "this is being clicked");
                 Intent intent3 = new Intent(this, FriendRequests.class);
                 startActivity(intent3);
                 break;
