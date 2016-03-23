@@ -16,6 +16,7 @@ import com.basiccalc.slidenerdtut.R;
  */
 public class FriendRequests extends AppCompatActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener, AdapterViewCompat.OnItemSelectedListener {
     private Toolbar toolbar;
+    private int userId;
     
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -40,6 +41,97 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
     public void onNothingSelected(AdapterViewCompat<?> parent) {
 
     }
+
+        class task extends AsyncTask<String, String, Void>
+        {
+            private ProgressDialog progressDialog = new ProgressDialog(Skejewels.this);
+            InputStream is = null ;
+            String result = "";
+            protected void onPreExecute() {
+                if(alreadyBegun == 0){
+                    setMonthText();
+                }
+                progressDialog.setMessage("Fetching data...");
+                progressDialog.show();
+                progressDialog.setOnCancelListener(new OnCancelListener() {
+                    public void onCancel(DialogInterface arg0) {
+                        task.this.cancel(true);
+                    }
+                });
+            }
+            protected Void doInBackground(String... params){
+
+                String url_select="http://skejewels.com/Android/AndroidFriendRequests.php?id=" + userId;
+                Log.d(TAG, "" + url_select);
+
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(url_select);
+
+
+                ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+                try {
+                    httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+                    HttpEntity httpEntity = httpResponse.getEntity();
+
+                    //read content
+                    is =  httpEntity.getContent();
+
+
+
+
+                } catch (Exception e) {
+
+                    Log.e("log_tag", "Error in http connection " + e.toString());
+                    //Toast.makeText(Skejewels.this, "Please Try Again", Toast.LENGTH_LONG).show();
+                }
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    StringBuilder sb = new StringBuilder();
+                    String line = "";
+                    while((line=br.readLine())!=null)
+                    {
+                        sb.append(line + "\n");
+                    }
+                    is.close();
+                    result=sb.toString();
+
+                    Log.d(TAG, "got to here now!!!! " + result);
+
+                } catch (Exception e) {
+                    Log.e("log_tag", "Error converting result "+e.toString());
+                }
+
+                return null;
+
+            }
+            protected void onPostExecute(Void v){
+                try {
+                    String[] indivs = result.split("pampurppampurpampurp");
+                    rows.clear();
+                    for (int i = 0; i < indivs.length - 1; i++) {
+                        String eventName = indivs[i];
+                        Log.d(TAG, "Event:" + eventName + " " + dayOfWeek);
+                    }
+
+                    this.progressDialog.dismiss();
+
+                    if(alreadyBegun == 0) {
+                        onCreateCalendar();
+                        alreadyBegun++;
+                    }else{
+                        rebuildCalendar();
+                    }
+
+                    onSpreadCreate();
+
+                }catch(Exception e){
+                    Log.e("log_tag", "Error parsing data "+e.toString());
+                }
+            }
+        }
 
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
