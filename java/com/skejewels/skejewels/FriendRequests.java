@@ -70,13 +70,14 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         new task().execute();
+        lastBoxId = R.id.textView20;
 
     }
 
     public void makeCard(String usersId, String UsersName, String UsersNickname){
         mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         mainParams.setMargins((int)pxFromDp(getApplicationContext(), 2),(int)pxFromDp(getApplicationContext(), 10),(int)pxFromDp(getApplicationContext(), 5), 0);
-        mainParams.addRule(RelativeLayout.BELOW, R.id.textView20);
+        mainParams.addRule(RelativeLayout.BELOW, lastBoxId);
         mainParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         mainParams.addRule(RelativeLayout.ALIGN_PARENT_START);
         addBox = new TextView(FriendRequests.this);
