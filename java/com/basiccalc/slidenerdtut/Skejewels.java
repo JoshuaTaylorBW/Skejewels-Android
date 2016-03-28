@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.content.DialogInterface.OnCancelListener;
 import android.util.Log;
@@ -51,7 +52,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class Skejewels extends ActionBarActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener {
+public class Skejewels extends AppCompatActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener {
     private Toolbar toolbar;
     private Button title;
     private Button nextMonthButton, lastMonthButton;

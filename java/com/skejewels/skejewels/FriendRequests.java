@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,9 +23,6 @@ import android.widget.TextView;
 
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
 import com.basiccalc.slidenerdtut.R;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -44,7 +40,7 @@ import java.util.ArrayList;
 /**
  * Created by j80ma_000 on 3/20/2016.
  */
-public class FriendRequests extends AppCompatActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener {
+public class FriendRequests extends AppCompatActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener{
     private Toolbar toolbar;
     private TextView addBox, nicknameBox, wantsToText;
     private Button acceptButton, declineButton;
@@ -52,9 +48,6 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
     private int  userId = 188;
     private RelativeLayout layout;
     private RelativeLayout.LayoutParams acceptButtonParams, declineButtonParams, mainParams, nicknameParams, wantsToParams;
-
-
-    private GoogleApiClient client;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +63,34 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         new task().execute();
-        lastBoxId = R.id.textView20;
+        lastBoxId = R.id.textView4;
+
+    }
+
+    public void removeFirstBox(){
+        TextView first = (TextView) findViewById(R.id.textView4);
+
+        TextView second = (TextView) findViewById(R.id.textView5);
+        TextView third = (TextView) findViewById(R.id.textView6);
+        Button fourth = (Button) findViewById(R.id.button);
+        Button fifth = (Button) findViewById(R.id.button2);
+        first.setVisibility(View.INVISIBLE);
+        second.setVisibility(View.INVISIBLE);
+        third.setVisibility(View.INVISIBLE);
+        fourth.setVisibility(View.INVISIBLE);
+        fifth.setVisibility(View.INVISIBLE);
+    }
+
+    public void makeFirstCard(String usersId, String UsersName, String UsersNickname){
+        TextView first = (TextView) findViewById(R.id.textView4);
+        TextView second = (TextView) findViewById(R.id.textView5);
+        TextView third = (TextView) findViewById(R.id.textView6);
+        Button fourth = (Button) findViewById(R.id.button);
+        Button fifth = (Button) findViewById(R.id.button2);
+
+        first.setText(UsersName);
+        third.setText("@" + UsersNickname);
+
 
     }
 
@@ -164,14 +184,6 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    public void onItemSelected(AdapterViewCompat<?> parent, View view, int position, long id) {
-
-    }
-
-    public void onNothingSelected(AdapterViewCompat<?> parent) {
-
-    }
-
     class task extends AsyncTask<String, String, Void> {
         private ProgressDialog progressDialog = new ProgressDialog(FriendRequests.this);
         InputStream is = null;
@@ -237,8 +249,17 @@ public class FriendRequests extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Void v) {
             try {
                 String[] indivs = result.split("pampurppampurpampurp");
-                for (int i = 0; i < indivs.length - 1; i+=4) {
-                    makeCard(indivs[i+1], indivs[i+2], indivs[i+3]);
+                Log.d("Friends Length", indivs.length + " is how many friend requests length is");
+                if(indivs.length == 1){
+                    removeFirstBox();
+                }else {
+                    for (int i = 0; i < indivs.length - 1; i += 4) {
+                        if(i == 0){
+                            makeFirstCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+                        }else {
+                            makeCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+                        }
+                    }
                 }
 
                 this.progressDialog.dismiss();

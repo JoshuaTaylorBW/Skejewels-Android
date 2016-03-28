@@ -102,23 +102,23 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-        android:name="com.skejewels.skejewels.EditRepeatsAndPrivacy"
-        android:label="@string/activity_sign_up"
-        android:configChanges="orientation"
-        android:screenOrientation="portrait">
-    </activity>
-    <activity
-        android:name="com.skejewels.skejewels.Search"
-        android:label="@string/activity_search"
-        android:configChanges="orientation"
-        android:screenOrientation="portrait">
-    </activity>
-    <activity
-        android:name="com.skejewels.skejewels.FriendsCalendar"
-        android:label="@string/activity_friend_calendar"
-        android:configChanges="orientation"
-        android:screenOrientation="portrait">
-    </activity>
+            android:name="com.skejewels.skejewels.EditRepeatsAndPrivacy"
+            android:label="@string/activity_sign_up"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.skejewels.skejewels.Search"
+            android:label="@string/activity_search"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.skejewels.skejewels.FriendsCalendar"
+            android:label="@string/activity_friend_calendar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name="com.skejewels.skejewels.FriendsIndividualDayActivity"
             android:label="@string/activity_friend_individual_day"
@@ -136,11 +136,7 @@
             android:label="@string/activity_friend_requests"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
-        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        </activity>
     </application>
 
 </manifest>
