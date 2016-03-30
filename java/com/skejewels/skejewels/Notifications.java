@@ -1,12 +1,16 @@
 package com.skejewels.skejewels;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +20,19 @@ import android.widget.TextView;
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
 import com.basiccalc.slidenerdtut.R;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 /**
  * Created by j80ma_000 on 3/29/2016.
  */
@@ -24,6 +41,7 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
     private TextView addBox, nicknameBox, wantsToText;
     private int lastBoxId;
     private RelativeLayout layout;
+    private int  userId = 188;
     private RelativeLayout.LayoutParams acceptButtonParams, declineButtonParams, mainParams, nicknameParams, wantsToParams;
 
 
@@ -42,9 +60,9 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
 
         //new task().execute();
         lastBoxId = R.id.textView4;
-        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Wants to fuck you");
-        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Wants to fuck you");
-        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Wants to fuck you");
+        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Commented on your status");
+        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Likes your status");
+        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Likes your status");
 
     }
 
@@ -105,7 +123,95 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
     public void onClick(View view) {
 
     }
-    public void onFragmentInteraction(View v) {
+
+    class task extends AsyncTask<String, String, Void> {
+        private ProgressDialog progressDialog = new ProgressDialog(Notifications.this);
+        InputStream is = null;
+        String result = "";
+
+        protected void onPreExecute() {
+
+            progressDialog.setMessage("Fetching data...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    task.this.cancel(true);
+                }
+            });
+        }
+        protected Void doInBackground(String... params) {
+
+            String url_select = "http://skejewels.com/Android/AndroidNotifications.php?id=" + userId;
+            Log.d("Friend_Requests", "" + url_select);
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
+
+
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is = httpEntity.getContent();
+
+
+            } catch (Exception e) {
+
+                Log.e("log_tag", "Error in http connection " + e.toString());
+                //Toast.makeText(Skejewels.this, "Please Try Again", Toast.LENGTH_LONG).show();
+            }
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                is.close();
+                result = sb.toString();
+
+                Log.d("Friend_Requests", "got to here now!!!! " + result);
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result " + e.toString());
+            }
+
+            return null;
+
+        }
+
+        protected void onPostExecute(Void v) {
+            try {
+                String[] indivs = result.split("pampurppampurpampurp");
+                Log.d("Friends Length", indivs.length + " is how many friend requests length is");
+                if(indivs.length == 1){
+                    //removeFirstBox();
+                }else {
+                    for (int i = 0; i < indivs.length - 1; i += 4) {
+                        if(i == 0){
+                            //makeFirstCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+                        }else {
+                            //makeCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+                        }
+                    }
+                }
+
+                this.progressDialog.dismiss();
+
+
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error parsing data " + e.toString());
+            }
+        }
+    }
+
+        public void onFragmentInteraction(View v) {
 
     }
     public boolean onTouch(View view, MotionEvent motionEvent) {
