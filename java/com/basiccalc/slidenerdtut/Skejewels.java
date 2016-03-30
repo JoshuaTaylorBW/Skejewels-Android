@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.skejewels.skejewels.FriendRequests;
 import com.skejewels.skejewels.IndividualDayActivity;
 import com.skejewels.skejewels.IndividualEventActivity;
+import com.skejewels.skejewels.Notifications;
 import com.skejewels.skejewels.Search;
 import com.skejewels.skejewels.SignIn;
 import com.skejewels.skejewels.SignUp;
@@ -56,7 +57,7 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
     private Toolbar toolbar;
     private Button title;
     private Button nextMonthButton, lastMonthButton;
-    private TextView searchText, requestText;
+    private TextView searchText, requestText, notificationText;
     private static final String TAG = Skejewels.class.getSimpleName();
     private ArrayList rows = new ArrayList<String>();
     private String[] Maybe = new String[]{};
@@ -86,6 +87,9 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
 
         requestText = (TextView) findViewById(R.id.request_text);
         requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
 
         nextMonthButton = (Button) findViewById(R.id.nextMonthClickable);
         nextMonthButton.setOnClickListener(this);
@@ -1598,10 +1602,12 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
             case R.id.homeButton:
                 Log.d(TAG,  "GOT TO HERE :) :) :)");
                 alreadyBegun = 0;
-                // new task().execute();
                 Intent intent = new Intent(this, Skejewels.class);
                 startActivity(intent);
-
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
                 break;
             case R.id.nextMonthClickable:
                 rows.clear();
@@ -1614,8 +1620,8 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                 break;
             case R.id.request_text:
                 Log.d(TAG, "this is being clicked");
-                Intent intent3 = new Intent(this, FriendRequests.class);
-                startActivity(intent3);
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
                 break;
             case R.id.lastMonthClickable:
                 lastMonth();

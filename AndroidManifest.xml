@@ -137,6 +137,12 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.skejewels.skejewels.Notifications"
+            android:label="@string/activity_notifications"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

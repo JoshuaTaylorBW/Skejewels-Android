@@ -24,6 +24,7 @@
     <string name="activity_friend_individual_day"></string>
     <string name="activity_friend_individual_event"></string>
     <string name="activity_friend_requests"></string>
+    <string name="activity_notifications"></string>
 
     <string-array name="repeatarray">
         <item>Once</item>
