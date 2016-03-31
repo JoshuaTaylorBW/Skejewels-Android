@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,15 +59,26 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
-        //new task().execute();
+        new task().execute();
         lastBoxId = R.id.textView4;
-        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Commented on your status");
-        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Likes your status");
-        makeCard("1","Josh Sparks", "JoshuaTaylor8", "Likes your status");
+    }
+    public void removeFirstBox(){
+        TextView first = (TextView) findViewById(R.id.textView4);
+        TextView second = (TextView) findViewById(R.id.textView5);
+        first.setVisibility(View.INVISIBLE);
+        second.setVisibility(View.INVISIBLE);
+    }
+
+    public void makeFirstCard(String usersId, String UsersName, String message, String eventId){
+        TextView first = (TextView) findViewById(R.id.textView4);
+        TextView second = (TextView) findViewById(R.id.textView5);
+
+        first.setText(UsersName);
+        second.setText(message);
 
     }
 
-    public void makeCard(String usersId, String UsersName, String UsersNickname, String message){
+    public void makeCard(String usersId, String UsersName, String message, String eventId){
         mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         mainParams.setMargins((int)pxFromDp(getApplicationContext(), 2),(int)pxFromDp(getApplicationContext(), 10),(int)pxFromDp(getApplicationContext(), 5), 0);
         mainParams.addRule(RelativeLayout.BELOW, lastBoxId);
@@ -85,31 +97,15 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
         layout.addView(addBox, mainParams);
         lastBoxId = addBox.getId();
 
-        nicknameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        nicknameParams.setMargins(0, (int)pxFromDp(getApplicationContext(), 21), 0, 0);
-        nicknameParams.addRule(RelativeLayout.ALIGN_TOP, lastBoxId);
-        nicknameParams.addRule(Gravity.CENTER);
-        nicknameBox = new TextView(Notifications.this);
-        nicknameBox.setTextColor(Color.parseColor("#88A5C4"));
-        nicknameBox.setTextSize(13);
-        nicknameBox.setGravity(Gravity.CENTER_HORIZONTAL);
-        nicknameBox.setText("@" + UsersNickname);
-        nicknameBox.setId(View.generateViewId());
-        nicknameBox.setPadding(0, 0, 0, (int)pxFromDp(getApplicationContext(), 125));//Set padding of box. (Left, top, right, bottom)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            nicknameBox.setElevation(4);
-        }
-        layout.addView(nicknameBox, nicknameParams);
-
         wantsToParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         wantsToParams.setMargins(0, (int)pxFromDp(getApplicationContext(), 21), 0, 0);
-        wantsToParams.addRule(RelativeLayout.ALIGN_TOP, nicknameBox.getId());
+        wantsToParams.addRule(RelativeLayout.ALIGN_TOP, addBox.getId());
         wantsToParams.addRule(Gravity.CENTER);
         wantsToText = new TextView(Notifications.this);
         wantsToText.setTextColor(Color.parseColor("#000000"));
         wantsToText.setTextSize(13);
         wantsToText.setGravity(Gravity.CENTER_HORIZONTAL);
-        wantsToText.setText("Wants to be your \n friend");
+        wantsToText.setText(message);
         wantsToText.setId(View.generateViewId());
         wantsToText.setPadding(0, 0, 0, (int)pxFromDp(getApplicationContext(), 0));//Set padding of box. (Left, top, right, bottom)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -175,7 +171,7 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
                 is.close();
                 result = sb.toString();
 
-                Log.d("Friend_Requests", "got to here now!!!! " + result);
+                Log.d("Notifications", "got to here now!!!! " + result);
 
             } catch (Exception e) {
                 Log.e("log_tag", "Error converting result " + e.toString());
@@ -187,18 +183,41 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
 
         protected void onPostExecute(Void v) {
             try {
-                String[] indivs = result.split("pampurppampurpampurp");
-                Log.d("Friends Length", indivs.length + " is how many friend requests length is");
+                //who commented's id, who commented's name, the comment, commentEventId;
+                String indivs1 = result.replaceAll("\\?", "pampurp").replaceAll("\\^--\\^", "");
+                Log.d("Notified Length", indivs1);
+                String[] indivs = indivs1.split("pampurppampurp");
+                Log.d("Friends Length", indivs.length + " is how many friend notifications length is");
                 if(indivs.length == 1){
-                    //removeFirstBox();
+                    removeFirstBox();
                 }else {
-                    for (int i = 0; i < indivs.length - 1; i += 4) {
-                        if(i == 0){
-                            //makeFirstCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+                    for(int x = 0; x < indivs.length - 1; x++){
+                        String[] thisOne = indivs[x].split(",");
+                        Log.d("Indiv Request", indivs[x]);
+                        String note;
+                        if (x == 0) {
+                            if (thisOne.length == 5) {
+                                makeFirstCard(thisOne[0], thisOne[1], thisOne[2] + "\n" + thisOne[3], thisOne[4]);
+                            } else {
+                                makeFirstCard(thisOne[0], thisOne[1], thisOne[2], thisOne[3]);
+                            }
                         }else {
-                            //makeCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+                            if (thisOne.length == 5) {
+                                makeCard(thisOne[0], thisOne[1], thisOne[2] + "\n" + thisOne[3], thisOne[4]);
+                            } else {
+
+                                makeCard(thisOne[0], thisOne[1], thisOne[2], thisOne[3]);
+                            }
                         }
+
+//                                //makeFirstCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+//                            }else {
+//                                makeCard(indivs[i], indivs[i + 1], indivs[i + 2] + "\n" + indivs[i + 3], indivs[i+4]);
+//                                //makeCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
+//                            }
+//                        }
                     }
+
                 }
 
                 this.progressDialog.dismiss();
