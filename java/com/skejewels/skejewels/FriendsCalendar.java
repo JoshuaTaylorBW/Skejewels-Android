@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
 import com.basiccalc.slidenerdtut.R;
+import com.basiccalc.slidenerdtut.Skejewels;
 import com.skejewels.skejewels.IndividualDayActivity;
 import com.skejewels.skejewels.IndividualEventActivity;
 import com.skejewels.skejewels.Search;
@@ -56,9 +57,7 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
   private String friendsName = "Terrence Mullen";
   private String friendsId = "0";
   private Toolbar toolbar;
-  private Button title;
   private Button nextMonthButton, lastMonthButton;
-  private TextView searchText;
   private static final String TAG = FriendsCalendar.class.getSimpleName();
   private ArrayList rows = new ArrayList<String>();
   private String[] Maybe = new String[]{};
@@ -70,6 +69,8 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
   DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
   Date date;
   String dateString;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
 
   public void onCreate(Bundle savedInstanceState){
       super.onCreate(savedInstanceState);
@@ -82,8 +83,19 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
       }
       toolbar=(Toolbar)findViewById(R.id.app_bar);
       setSupportActionBar(toolbar);
+
       title = (Button) findViewById(R.id.homeButton);
       title.setOnClickListener(this);
+
+      searchText = (TextView) findViewById(R.id.search_text);
+      searchText.setOnClickListener(this);
+
+      requestText = (TextView) findViewById(R.id.request_text);
+      requestText.setOnClickListener(this);
+
+      notificationText = (TextView) findViewById(R.id.notification_text);
+      notificationText.setOnClickListener(this);
+
 
       searchText = (TextView) findViewById(R.id.search_text);
       searchText.setOnClickListener(this);
@@ -103,24 +115,30 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
     public void onClick(View v) {
         checkIfContentsHeadersClicked(v);
         switch(v.getId()) {
-            case R.id.homeButton:
-                Log.d(TAG,  "GOT TO HERE :) :) :)");
-                alreadyBegun = 0;
-                // new task().execute();
-                Intent intent = new Intent(this, FriendsCalendar.class);
-                startActivity(intent);
+          case R.id.homeButton:
+              Log.d(TAG,  "GOT TO HERE :) :) :)");
+              alreadyBegun = 0;
+              Intent intent = new Intent(this, Skejewels.class);
+              startActivity(intent);
+              break;
+          case R.id.notification_text:
+              Intent intent3 = new Intent(this, Notifications.class);
+              startActivity(intent3);
+              break;
+          case R.id.search_text:
+              Intent intent2 = new Intent(this, Search.class);
+              startActivity(intent2);
+              break;
+          case R.id.request_text:
+              Log.d(TAG, "this is being clicked");
+              Intent intent4 = new Intent(this, FriendRequests.class);
+              startActivity(intent4);
+              break;
 
-                break;
             case R.id.nextMonthClickable:
                 rows.clear();
                 nextMonth();
-
                 Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
-
-                break;
-            case R.id.search_text:
-                Intent intent2 = new Intent(this, Search.class);
-                startActivity(intent2);
                 break;
             case R.id.lastMonthClickable:
                 lastMonth();
@@ -376,7 +394,8 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
                     monthFullName = "December";
                     break;
             }
-            month.setText(monthFullName);
+
+            month.setText(friendsName.split(" ")[0] + "\'s " + monthFullName);
             Typeface myCustomTypeFace = Typeface.createFromAsset(getAssets(), "fonts/nexa_font.otf");
 
             month.setTypeface(myCustomTypeFace);

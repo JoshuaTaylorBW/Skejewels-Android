@@ -47,7 +47,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
     private ArrayList<Integer> ids;
-    private Button title;
+
 
     private int month = 6; //which month are we looking at
     private int day = 24;//which day of the month are we looking at
@@ -60,6 +60,8 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     private TextView box, time;
     private LinearLayout layout;
     private LinearLayout.LayoutParams layoutParams, timeLayoutParams;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
 
     private TextView topDate;//date that appears at top of screen.
 
@@ -89,6 +91,15 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
 
         title = (Button) findViewById(R.id.homeButton);
         title.setOnClickListener(this);
+
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
 
         layout = (LinearLayout)findViewById(R.id.EventsLayout);
 
@@ -284,11 +295,23 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
 
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.homeButton:
-                Intent intent = new Intent(this, Skejewels.class);
-                startActivity(intent);
-                Log.d(TAG, "Worked");
-                break;
+          case R.id.homeButton:
+              Intent intent = new Intent(this, Skejewels.class);
+              startActivity(intent);
+              break;
+          case R.id.notification_text:
+              Intent intent3 = new Intent(this, Notifications.class);
+              startActivity(intent3);
+              break;
+          case R.id.search_text:
+              Intent intent2 = new Intent(this, Search.class);
+              startActivity(intent2);
+              break;
+          case R.id.request_text:
+              Log.d(TAG, "this is being clicked");
+              Intent intent4 = new Intent(this, FriendRequests.class);
+              startActivity(intent4);
+              break;
         }
     }
 

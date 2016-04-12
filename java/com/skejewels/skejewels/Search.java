@@ -84,6 +84,9 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
     private int lastNicknameId;
     final Context context = this;
 
+    private Button title;
+    private TextView searchText, requestText, notificationText;
+
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
@@ -91,6 +94,15 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         contentHolder = (RelativeLayout) findViewById(R.id.contentHolder);
         eventNameEditor = (EditText) findViewById(R.id.EventNameEditor);
         ids = new ArrayList<String>();
+
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
         nameIds = new ArrayList<Integer>();
         eventNameEditor.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

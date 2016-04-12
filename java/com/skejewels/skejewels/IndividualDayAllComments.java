@@ -1,5 +1,6 @@
 package com.skejewels.skejewels;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -60,6 +62,8 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
     private LinearLayout.LayoutParams layoutParams, commentLayoutParams;
     private TextView name, indivComment;
     private ScrollView scrollLayout;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -72,7 +76,19 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         //Declare all Buttons
         editButton = (Button) findViewById(R.id.EditButton); homeButton = (Button) findViewById(R.id.homeButton);
         scrollLayout = (ScrollView) findViewById(R.id.ScrollView01);
-       
+
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
+
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
+
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
@@ -89,7 +105,26 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
     }
 
     public void onClick(View v) {
-
+        switch(v.getId()) {
+            case R.id.homeButton:
+                Log.d(TAG,  "GOT TO HERE :) :) :)");
+                Intent intent = new Intent(this, Skejewels.class);
+                startActivity(intent);
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Log.d(TAG, "this is being clicked");
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
+                break;
+        }
     }
 
     public void onFragmentInteraction(View v) {
@@ -199,7 +234,9 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         name.setTextColor(Color.parseColor("#009688"));
         name.setPadding(60, 100, 0, 15);//Set padding of box. (Left, top, right, bottom)
         name.setText(commenterName);//Set time of event. This will be dynamic.
+
         name.setElevation(8);
+
         layout.addView(name, commentLayoutParams);
 
         layoutParams.setMargins(0, 0, 0, 0);
@@ -220,6 +257,6 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
 
 
     }
-    
+
 
 }

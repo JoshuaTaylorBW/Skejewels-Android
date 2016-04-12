@@ -3,6 +3,7 @@ package com.skejewels.skejewels;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
 import com.basiccalc.slidenerdtut.R;
+import com.basiccalc.slidenerdtut.Skejewels;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -48,6 +50,8 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
     private int  userId = 188;
     private RelativeLayout layout;
     private RelativeLayout.LayoutParams acceptButtonParams, declineButtonParams, mainParams, nicknameParams, wantsToParams;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,18 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         setSupportActionBar(toolbar);
 
         layout = (RelativeLayout)findViewById(R.id.cardholder);
+
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
+
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
 
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -177,7 +193,24 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
     }
 
     public void onClick(View view) {
-
+        switch(view.getId()) {
+            case R.id.homeButton:
+                Intent intent = new Intent(this, Skejewels.class);
+                startActivity(intent);
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
+                break;
+        }
     }
 
     public void onFragmentInteraction(View v) {

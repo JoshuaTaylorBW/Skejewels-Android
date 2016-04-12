@@ -18,6 +18,7 @@ public class SignIn extends ActionBarActivity implements View.OnClickListener, N
     private Button signInButton, signUpButton;
     private EditText Username, Password;
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
@@ -37,6 +38,7 @@ public class SignIn extends ActionBarActivity implements View.OnClickListener, N
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
+          
             case R.id.SignInButton:
                 //new task.execute();
                 break;

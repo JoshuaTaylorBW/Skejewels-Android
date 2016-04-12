@@ -61,7 +61,8 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
     Spinner repeatType;
     Button NextButton;
     private Intent restartIntent;
-
+    private Button title;
+    private TextView searchText, requestText, notificationText;
     private String typeOfRepeat;
     private String typeOfVisibility;
 
@@ -76,7 +77,17 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
         repeatType.setOnItemSelectedListener(this);
         NextButton = (Button) findViewById(R.id.nextistButton);
         NextButton.setOnClickListener(this);
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
         restartIntent = new Intent(this, Skejewels.class);
 
         Bundle extras = getIntent().getExtras();

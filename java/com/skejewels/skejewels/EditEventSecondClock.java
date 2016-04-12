@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
@@ -22,7 +23,8 @@ public class EditEventSecondClock  extends ActionBarActivity implements OnClickL
     TimePicker time_picker;
     private Button nextButton;
 
-
+    private Button title;
+    private TextView searchText, requestText, notificationText;
     public String eventId;
     public String newEventName;
     public String newBeginningHour;
@@ -38,7 +40,17 @@ public class EditEventSecondClock  extends ActionBarActivity implements OnClickL
 
         nextButton = (Button) findViewById(R.id.nexterButton);
         nextButton.setOnClickListener(this);
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
 
         time_picker = (TimePicker) findViewById(R.id.FirstClock);
 

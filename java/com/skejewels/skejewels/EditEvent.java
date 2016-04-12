@@ -40,6 +40,8 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
     private String eventName, startTime, endTime, repeatType,visibility;
     private Button nextButton, deleteButton;
     private EditText newEventName;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
     private static final String TAG = Skejewels.class.getSimpleName();
 
 
@@ -49,7 +51,17 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
         setContentView(R.layout.activity_edit_event);
         Log.d("From EditEvent.java", "Started");
 
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
 
         nextButton = (Button)findViewById(R.id.nextButton);
         nextButton.setOnClickListener(this);
