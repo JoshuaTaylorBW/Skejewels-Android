@@ -60,6 +60,7 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
     private TextView searchText, requestText, notificationText;
     private static final String TAG = Skejewels.class.getSimpleName();
     private ArrayList rows = new ArrayList<String>();
+    private ArrayList spreadButtonIds = new ArrayList<Button>();
     private String[] Maybe = new String[]{};
     private int monthInt = 0;
     private int yearInt = 2015;
@@ -120,13 +121,10 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
             setContentsAndHeadersClick();
         }
         public void rebuildCalendar(){
-
-
             resetContents();
             setFirstDay();
             setContents();
             setMonthText(monthInt);
-
         }
 
         //SET VARIABLES OUTSIDE OF CALENDAR
@@ -331,6 +329,7 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
             Calendar c = Calendar.getInstance();
             c.setTime(getFirstDateOfCurrentMonth());
             dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+            Log.d("skejewels", "&&&&&&&&&&&&&&" + dayOfWeek);
             if(alreadyBegun == 0){
                 initDayOfWeek = dayOfWeek;
             }
@@ -1358,6 +1357,25 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
         cardId = the ID of the card directly above the one being built
 
         */
+
+        View.OnClickListener spreadButtonClicks = new View.OnClickListener() {
+            public void onClick(View view){
+                Button button = (Button) view;
+                for(int i = 0; i < spreadButtonIds.size(); i++){
+                    //evens are likes, odds are comments
+                    if(i % 2 == 0){
+                        if(button.getText().equals("Like")){
+                            button.setText("Unlike");
+                        }else{
+                            button.setText("Like");
+                        }
+                    }else{
+                        //comment task
+                    }
+                }
+            }
+        };
+
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         public void makeSpreadCard(int cardId, int usersId, String eventName, String usersName, int commentAmount,
                                    int likeAmount, int eventId, String eventBeginDate, String eventBegintime, String eventEndDate, String eventEndTime){
@@ -1456,6 +1474,7 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                     spreadCardLikeButton.setElevation(12);
                     spreadCardLikeButton.setPadding(80,0,80,0);
 
+                    spreadCardLikeButton.setOnClickListener(spreadButtonClicks);
                     holder.addView(spreadCardLikeButton, likeButtonParams);
 
             //Add Comment Button
@@ -1469,6 +1488,8 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                     spreadCardCommentButton.setTextColor(Color.parseColor("#009688"));
                     spreadCardCommentButton.setElevation(12);
                     spreadCardCommentButton.setPadding(80,0,80,0);
+
+                    spreadCardCommentButton.setOnClickListener(spreadButtonClicks);
                     holder.addView(spreadCardCommentButton, commentButtonParams);
 
 

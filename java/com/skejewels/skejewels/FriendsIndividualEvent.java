@@ -48,6 +48,7 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
     private Toolbar toolbar;
+    private String friendsName = "Terrence Mullen";
     private int numEventId = 0;
     private String eventId = "2";
     private Intent changeIntent;
@@ -71,6 +72,7 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
     Bundle extras = getIntent().getExtras();
     if(extras != null){
         eventId = extras.getString("eventId", "ALMOST ANYTHING");
+        friendsName = extras.getString("friendsName", "");
     }
 
     new task().execute();

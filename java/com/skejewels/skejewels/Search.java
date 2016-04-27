@@ -104,9 +104,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
                     Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
                     Matcher m = p.matcher(what);
                     boolean b = m.find();
-                    Log.d("search", "it is: " + b);
 
-                    Log.d("search", what);
                     new task().execute();
                 } else {
                     for (int i = 0; i < ids.size(); i++) {
@@ -130,7 +128,6 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
                 if(view.getId() == nameIds.get(i)){
                   boolean areFriends = false;
                   for (int j = 0; j < friends.length; j++) {
-                    Log.d("from search", friends[j] + "===" + ((TextView) view).getHint());
                     if(((TextView) view).getHint().toString().split("\\s")[1].equals(friends[j])){
                       areFriends = true;
                     }
@@ -140,9 +137,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
                     intent.putExtra("friendsName", name.getText());
                     intent.putExtra("friendsId", name.getHint().toString());
                     startActivity(intent);
-                    Log.d("from search", "you guys are friends");
                   }else{
-                    Log.d("from search", "you guys are not friends");
                   }
                 }
             }
@@ -421,7 +416,6 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
 
         }
 
-        Log.d("Search", "lkjdfskljadfsklj" + finalOrder.toString());
         for (int i = 0; i < finalOrder.size(); i++) {
             String[] part = finalOrder.get(i).split(",");
 

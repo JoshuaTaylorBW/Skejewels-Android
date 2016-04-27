@@ -254,8 +254,8 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
 
     public void goToEditActivity(String id) {
         Intent intent = new Intent(this, FriendsIndividualEvent.class);
-        Log.d(TAG, "the id is///////////" + id);
         intent.putExtra("eventId", id);
+        intent.putExtra("friendsName", friendsName);
         startActivity(intent);
     }
 
