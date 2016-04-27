@@ -72,6 +72,9 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
     private int year = 2015;
     private Intent restartIntent;
 
+    private Button title;
+    private TextView searchText, requestText, notificationText;
+
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -83,7 +86,17 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
         repeatType.setOnItemSelectedListener(this);
         NextButton = (Button) findViewById(R.id.nextistButton);
         NextButton.setOnClickListener(this);
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
         restartIntent = new Intent(this, Skejewels.class);
         typeOfRepeat = "Once";
 
@@ -107,6 +120,23 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
 
     public void onClick(View v) {
         switch (v.getId()){
+          case R.id.homeButton:
+              Intent intent = new Intent(this, Skejewels.class);
+              startActivity(intent);
+              break;
+          case R.id.notification_text:
+              Intent intent3 = new Intent(this, Notifications.class);
+              startActivity(intent3);
+              break;
+          case R.id.search_text:
+              Intent intent2 = new Intent(this, Search.class);
+              startActivity(intent2);
+              break;
+          case R.id.request_text:
+              Intent intent4 = new Intent(this, FriendRequests.class);
+              startActivity(intent4);
+              break;
+
             case R.id.nextistButton:
                 repeatEndDay = calendar.getDayOfMonth();
                 repeatEndMonth = calendar.getMonth() + 1;
@@ -159,7 +189,7 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
             String newEventName = eventName.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered");
             String url_select="http://skejewels.com/Android/SQLAdd.php?n='" + newEventName +
             "'&sM=" + month + "&sD=" + day + "&sY=" + year + "&sH=" + startingHour + "&sMi=" + startingMinute +
-            "&eM=" + 10 + "&eD=" + 15 + "&eH=" + endingHour   + "&eMi=" + endingMinute + 
+            "&eM=" + 10 + "&eD=" + 15 + "&eH=" + endingHour   + "&eMi=" + endingMinute +
             "&rT=" + typeOfRepeat + "&eRM=" + repeatEndMonth + "&eRD="+repeatEndDay + "&eRY=" + repeatEndYear;
             Log.d("Fuck That Man", url_select);
 

@@ -3,6 +3,7 @@ package com.skejewels.skejewels;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
 import com.basiccalc.slidenerdtut.R;
+import com.basiccalc.slidenerdtut.Skejewels;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,6 +44,8 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
     private TextView addBox, nicknameBox, wantsToText;
     private int lastBoxId;
     private RelativeLayout layout;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
     private int  userId = 188;
     private RelativeLayout.LayoutParams acceptButtonParams, declineButtonParams, mainParams, nicknameParams, wantsToParams;
 
@@ -54,7 +58,17 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
         setSupportActionBar(toolbar);
 
         layout = (RelativeLayout)findViewById(R.id.cardholder);
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
@@ -117,7 +131,24 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
         return dp * context.getResources().getDisplayMetrics().density;
     }
     public void onClick(View view) {
-
+        switch(view.getId()) {
+            case R.id.homeButton:
+                Intent intent = new Intent(this, Skejewels.class);
+                startActivity(intent);
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
+                break;
+        }
     }
 
     class task extends AsyncTask<String, String, Void> {

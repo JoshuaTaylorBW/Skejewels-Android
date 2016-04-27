@@ -18,6 +18,7 @@ public class SignUp extends ActionBarActivity implements View.OnClickListener, N
     private Button signInButton, signUpButton;
     private EditText Username, Password;
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);

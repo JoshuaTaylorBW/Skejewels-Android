@@ -2,11 +2,17 @@ package com.basiccalc.slidenerdtut;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+
+import com.skejewels.skejewels.FriendRequests;
+import com.skejewels.skejewels.Notifications;
+import com.skejewels.skejewels.Search;
 
 public class FullDrawerLayout extends DrawerLayout {
 
@@ -105,5 +111,4 @@ public class FullDrawerLayout extends DrawerLayout {
         }
         return Integer.toHexString(gravity);
     }
-
 }

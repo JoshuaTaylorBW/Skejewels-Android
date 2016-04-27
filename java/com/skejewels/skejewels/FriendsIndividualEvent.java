@@ -52,6 +52,8 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
     private int numEventId = 0;
     private String eventId = "2";
     private Intent changeIntent;
+    private Button title;
+    private TextView searchText, requestText, notificationText;
     private TextView eventExplanation, likeAmount, firstCommentName, secondCommentName, firstComment, secondComment, totalCommentAmount;
     private Button likeButton, commentButton, editButton, homeButton;
   public void onCreate(Bundle savedInstanceState){
@@ -64,6 +66,18 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
     eventExplanation = (TextView) findViewById(R.id.EventExplanation);likeAmount = (TextView) findViewById(R.id.LikeAmount);firstCommentName = (TextView) findViewById(R.id.FirstCommentName);secondCommentName = (TextView) findViewById(R.id.SecondCommentName);firstComment = (TextView) findViewById(R.id.FirstComment);secondComment = (TextView) findViewById(R.id.SecondComment);totalCommentAmount = (TextView) findViewById(R.id.TotalCommentAmount);
     //Declare all Buttons
     likeButton = (Button) findViewById(R.id.LikeButton); editButton = (Button) findViewById(R.id.EditButton); homeButton = (Button) findViewById(R.id.homeButton);
+
+      title = (Button) findViewById(R.id.homeButton);
+      title.setOnClickListener(this);
+
+      searchText = (TextView) findViewById(R.id.search_text);
+      searchText.setOnClickListener(this);
+
+      requestText = (TextView) findViewById(R.id.request_text);
+      requestText.setOnClickListener(this);
+
+      notificationText = (TextView) findViewById(R.id.notification_text);
+      notificationText.setOnClickListener(this);
 
     NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
             getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -89,7 +103,26 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
   }
 
     public void onClick(View v) {
-
+        switch(v.getId()) {
+            case R.id.homeButton:
+                Log.d(TAG,  "GOT TO HERE :) :) :)");
+                Intent intent = new Intent(this, Skejewels.class);
+                startActivity(intent);
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Log.d(TAG, "this is being clicked");
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
+                break;
+        }
     }
 
     class task extends AsyncTask<String, String, Void> {
@@ -292,5 +325,3 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
   }
 
 }
-
-

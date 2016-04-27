@@ -55,7 +55,9 @@ public class FirstClockActivity extends ActionBarActivity implements View.OnClic
     private int month = 6; //which month are we looking at
     private int day = 24;//which day of the month are we looking at
     private int year = 2015;
-    
+    private Button title;
+    private TextView searchText, requestText, notificationText;
+
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -65,7 +67,17 @@ public class FirstClockActivity extends ActionBarActivity implements View.OnClic
         nextButton.setOnClickListener(this);
 
         time_picker = (TimePicker) findViewById(R.id.FirstClock);
+        title = (Button) findViewById(R.id.homeButton);
+        title.setOnClickListener(this);
 
+        searchText = (TextView) findViewById(R.id.search_text);
+        searchText.setOnClickListener(this);
+
+        requestText = (TextView) findViewById(R.id.request_text);
+        requestText.setOnClickListener(this);
+
+        notificationText = (TextView) findViewById(R.id.notification_text);
+        notificationText.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             eventName = extras.getString("specificEventName", "Random Event");
@@ -78,15 +90,31 @@ public class FirstClockActivity extends ActionBarActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
+          case R.id.homeButton:
+              Intent intent = new Intent(this, Skejewels.class);
+              startActivity(intent);
+              break;
+          case R.id.notification_text:
+              Intent intent3 = new Intent(this, Notifications.class);
+              startActivity(intent3);
+              break;
+          case R.id.search_text:
+              Intent intent2 = new Intent(this, Search.class);
+              startActivity(intent2);
+              break;
+          case R.id.request_text:
+              Intent intent4 = new Intent(this, FriendRequests.class);
+              startActivity(intent4);
+              break;
             case R.id.nextistButton:
-                Intent intent = new Intent(this, SecondClockActivity.class);
-                intent.putExtra("EventName", eventName);
-                intent.putExtra("eventStartDay", day);
-                intent.putExtra("eventStartMonth", month);
-                intent.putExtra("eventStartYear", year);
-                intent.putExtra("StartingHour", time_picker.getCurrentHour() );
-                intent.putExtra("StartingMinute", time_picker.getCurrentMinute());
-                startActivity(intent);
+                Intent intent8 = new Intent(this, SecondClockActivity.class);
+                intent8.putExtra("EventName", eventName);
+                intent8.putExtra("eventStartDay", day);
+                intent8.putExtra("eventStartMonth", month);
+                intent8.putExtra("eventStartYear", year);
+                intent8.putExtra("StartingHour", time_picker.getCurrentHour() );
+                intent8.putExtra("StartingMinute", time_picker.getCurrentMinute());
+                startActivity(intent8);
             break;
         }
     }

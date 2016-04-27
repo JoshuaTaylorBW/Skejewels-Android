@@ -55,8 +55,9 @@ import java.util.Locale;
 
 public class Skejewels extends AppCompatActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener {
     private Toolbar toolbar;
+    private Button nextMonthButton, lastMonthButton, homeButton;
+
     private Button title;
-    private Button nextMonthButton, lastMonthButton;
     private TextView searchText, requestText, notificationText;
     private static final String TAG = Skejewels.class.getSimpleName();
     private ArrayList rows = new ArrayList<String>();
@@ -1630,11 +1631,6 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                 Intent intent3 = new Intent(this, Notifications.class);
                 startActivity(intent3);
                 break;
-            case R.id.nextMonthClickable:
-                rows.clear();
-                nextMonth();
-                Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
-                break;
             case R.id.search_text:
                 Intent intent2 = new Intent(this, Search.class);
                 startActivity(intent2);
@@ -1643,6 +1639,11 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                 Log.d(TAG, "this is being clicked");
                 Intent intent4 = new Intent(this, FriendRequests.class);
                 startActivity(intent4);
+                break;
+            case R.id.nextMonthClickable:
+                rows.clear();
+                nextMonth();
+                Log.d(TAG, "INPUT RECIEVED :D" + monthInt);
                 break;
             case R.id.lastMonthClickable:
                 lastMonth();
