@@ -68,6 +68,11 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
         title = (Button) findViewById(R.id.homeButton);
         title.setOnClickListener(this);
 
+        commentButton = (Button) findViewById(R.id.CommentButton);
+        commentButton.setOnClickListener(this);
+
+        likeButton.setOnClickListener(this);
+
         searchText = (TextView) findViewById(R.id.search_text);
         searchText.setOnClickListener(this);
 
@@ -106,16 +111,25 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
               startActivity(intent2);
               break;
           case R.id.request_text:
-              Log.d(TAG, "this is being clicked");
               Intent intent4 = new Intent(this, FriendRequests.class);
               startActivity(intent4);
               break;
-
+            case R.id.CommentButton:
+                changeIntent.putExtra("eventID", eventId);
+                startActivity(changeIntent);
+                break;
+            case R.id.LikeButton:
+                Button button = (Button) v;
+                if (button.getText().toString().equals("Like")) {
+                    button.setText("Unlike");
+                } else {
+                    button.setText("Like");
+                }
+                break;
             case R.id.EditButton:
                 Intent intent8 = new Intent(this, EditEvent.class);
                 intent8.putExtra("eventId", eventId);
                 startActivity(intent8);
-                Log.d(TAG, "Worked");
                 break;
         }
     }
@@ -181,7 +195,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 is.close();
                 result=sb.toString();
 
-                Log.d(TAG, "got to here now!!!! " + result);
 
             } catch (Exception e) {
                 Log.e("log_tag", "Error converting result "+e.toString());
@@ -200,7 +213,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 if(Integer.parseInt(indivs[2]) > 0){
                     new task2().execute();
                 }
-                Log.d(TAG, Integer.toString(indivs.length));
 
                 this.progressDialog.dismiss();
 
@@ -262,7 +274,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 is.close();
                 result=sb.toString();
 
-                Log.d(TAG, "got to here now!!!! " + result);
 
             } catch (Exception e) {
                 Log.e("log_tag", "Error converting result "+e.toString());
@@ -276,7 +287,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
             try {
                 String[] indivs = result.split("pampurppampurpampurp");
                 for(int i = 0; i < indivs.length; i++){
-                    Log.d(TAG + "Second", "" + i + "=" + indivs[i]);
                 }
                 int amountOfComments = Integer.parseInt(indivs[1]);
                 if(amountOfComments >= 1){
@@ -293,7 +303,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                     //Commenter Id = i+2
 
 
-                Log.d(TAG, Integer.toString(indivs.length));
 
                 this.progressDialog.dismiss();
 

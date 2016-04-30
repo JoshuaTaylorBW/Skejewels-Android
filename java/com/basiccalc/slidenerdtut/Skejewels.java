@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.skejewels.skejewels.FriendRequests;
 import com.skejewels.skejewels.IndividualDayActivity;
+import com.skejewels.skejewels.IndividualDayAllComments;
 import com.skejewels.skejewels.IndividualEventActivity;
 import com.skejewels.skejewels.Notifications;
 import com.skejewels.skejewels.Search;
@@ -61,7 +63,7 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
     private TextView searchText, requestText, notificationText;
     private static final String TAG = Skejewels.class.getSimpleName();
     private ArrayList rows = new ArrayList<String>();
-    private ArrayList spreadButtonIds = new ArrayList<Button>();
+    private ArrayList<Integer> spreadButtonIds = new ArrayList<Integer>();
     private String[] Maybe = new String[]{};
     private int monthInt = 0;
     private int yearInt = 2015;
@@ -1358,20 +1360,27 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
         cardId = the ID of the card directly above the one being built
 
         */
-
+        private long mLastClickTime = 0;
         View.OnClickListener spreadButtonClicks = new View.OnClickListener() {
-            public void onClick(View view){
+            public void onClick(View view) {
                 Button button = (Button) view;
-                for(int i = 0; i < spreadButtonIds.size(); i++){
-                    //evens are likes, odds are comments
-                    if(i % 2 == 0){
-                        if(button.getText().equals("Like")){
-                            button.setText("Unlike");
-                        }else{
-                            button.setText("Like");
+                for (int i = 0; i < spreadButtonIds.size(); i++) {
+                    if (button.getId() == spreadButtonIds.get(i)) {
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (i % 2 == 0) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 100) {
+                                if (button.getText().toString().equals("Like")) {
+                                    button.setText("Unlike");
+                                } else {
+                                    button.setText("Like");
+                                }
+                            }
+                        } else {
+
+                            Intent changeIntent = new Intent(getApplicationContext(), IndividualDayAllComments.class);
+                            changeIntent.putExtra("eventID", button.getHint());
+                            startActivity(changeIntent);
                         }
-                    }else{
-                        //comment task
                     }
                 }
             }
@@ -1413,7 +1422,6 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                     repeater++;
                 }else{
                     lastCardId = spreadCardUserNameAndCard.getId();
-
                 }
 
             holder.addView(spreadCardUserNameAndCard, holderParams);
@@ -1473,8 +1481,10 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                     spreadCardLikeButton.setBackgroundColor(Color.TRANSPARENT);
                     spreadCardLikeButton.setTextColor(Color.parseColor("#009688"));
                     spreadCardLikeButton.setElevation(12);
-                    spreadCardLikeButton.setPadding(80,0,80,0);
+                    spreadCardLikeButton.setPadding(80, 0, 80, 0);
+                    spreadCardLikeButton.setId(View.generateViewId());
 
+                    spreadButtonIds.add(spreadCardLikeButton.getId());
                     spreadCardLikeButton.setOnClickListener(spreadButtonClicks);
                     holder.addView(spreadCardLikeButton, likeButtonParams);
 
@@ -1488,11 +1498,13 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                     spreadCardCommentButton.setBackgroundColor(Color.TRANSPARENT);
                     spreadCardCommentButton.setTextColor(Color.parseColor("#009688"));
                     spreadCardCommentButton.setElevation(12);
-                    spreadCardCommentButton.setPadding(80,0,80,0);
+                    spreadCardCommentButton.setPadding(80, 0, 80, 0);
+                    spreadCardCommentButton.setHint(Integer.toString(eventId));
+                    spreadCardCommentButton.setId(View.generateViewId());
+                    spreadButtonIds.add(spreadCardCommentButton.getId());
 
                     spreadCardCommentButton.setOnClickListener(spreadButtonClicks);
                     holder.addView(spreadCardCommentButton, commentButtonParams);
-
 
             //Like Amount Text
                 if(likeAmount > 0){

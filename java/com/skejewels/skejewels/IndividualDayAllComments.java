@@ -69,6 +69,11 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acivity_individual_day_comments);
 
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            eventId = Integer.parseInt(extras.getString("eventID", "157"));
+        }
+
         toolbar=(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         //Declare all TextViews
@@ -201,20 +206,24 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         protected void onPostExecute(Void v){
             try {
                 String[] indivs = result.split("pampurppampurpampurp");
-                for(int i = 0; i < indivs.length; i++){
-                    Log.d(TAG + "Second", "" + i + "=" + indivs[i]);
-                }
-                int amountOfComments = Integer.parseInt(indivs[1]);
-                makeFirstComment(indivs[2], indivs[3], indivs[4]);
-
-                for(int i = 5; i < indivs.length-1; i+=3){
-                    makeNextComment(indivs[i], indivs[i+1], indivs[i+2]);
-                }
-                scrollLayout.post(new Runnable() {
-                    public void run() {
-                        scrollLayout.fullScroll(ScrollView.FOCUS_DOWN);
+                if(Integer.parseInt(indivs[1]) > 0) {
+                    for (int i = 0; i < indivs.length; i++) {
+                        Log.d(TAG + "Second", "" + i + "=" + indivs[i]);
                     }
-                });
+                    int amountOfComments = Integer.parseInt(indivs[1]);
+                    makeFirstComment(indivs[2], indivs[3], indivs[4]);
+
+                    for (int i = 5; i < indivs.length - 1; i += 3) {
+                        makeNextComment(indivs[i], indivs[i + 1], indivs[i + 2]);
+                    }
+                    scrollLayout.post(new Runnable() {
+                        public void run() {
+                            scrollLayout.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
+                }else{
+                    removeFirstComment();
+                }
                 this.progressDialog.dismiss();
 
             }catch(Exception e){
@@ -227,6 +236,11 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         firstCommentName.setText(commenterName);
         firstCommentName.setHint(commenterId);
     }
+    public void removeFirstComment(){
+        firstComment.setText("");
+        firstCommentName.setText("");
+        firstCommentName.setHint(0);
+    }
     public void makeNextComment(String comment, String commenterName, String commenterId){
         name = new TextView(IndividualDayAllComments.this);
         name.setTextSize(18);
@@ -235,7 +249,9 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         name.setPadding(60, 100, 0, 15);//Set padding of box. (Left, top, right, bottom)
         name.setText(commenterName);//Set time of event. This will be dynamic.
 
-        name.setElevation(8);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            name.setElevation(8);
+        }
 
         layout.addView(name, commentLayoutParams);
 
