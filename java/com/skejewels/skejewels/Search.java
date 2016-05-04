@@ -149,7 +149,6 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
                     intent.putExtra("friendsName", name.getText());
                     intent.putExtra("friendsId", name.getHint().toString());
                     startActivity(intent);
-                  }else{
                   }
                 }
             }

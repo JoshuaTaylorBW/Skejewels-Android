@@ -1272,7 +1272,6 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
             protected Void doInBackground(String... params){
 
                 String url_select="http://skejewels.com/Android/printDaysOfMonth.php?Month=" + (monthInt + 1) + "&Year=" + yearInt;
-                Log.d(TAG, "" + url_select);
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(url_select);
@@ -1325,7 +1324,6 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
                         String eventName = indivs[i];
                         eventName = eventName.replace("\"", "");
                         rows.add(eventName);
-                        Log.d(TAG, "Event:" + eventName + " " + dayOfWeek);
                     }
 
                     this.progressDialog.dismiss();
@@ -1612,11 +1610,9 @@ public class Skejewels extends AppCompatActivity implements NavigationDrawerFrag
             protected void onPostExecute(Void v){
                 try {
                     String[] individual = result.split("doubledtumbleswillfumblemybumblebee");
-                    Log.d(TAG, "got to the feed now!!!! " + result);
 
                     for (int i = 1; i < individual.length  - 1; i++) {
                        String[] details = individual[i].split("pampurppampurpampurp");
-                        Log.d(TAG, "got to the feed now!!!! " + Arrays.toString(details));
                        makeSpreadCard(lastCardId, Integer.parseInt(details[1]), details[2], details[3], Integer.parseInt(details[4]), Integer.parseInt(details[5]), Integer.parseInt(details[6]), details[8],details[7],details[10],details[9]);
                        String eventName = individual[i];
                        eventName = eventName.replace("\"", "");

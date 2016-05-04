@@ -1,5 +1,6 @@
 package com.skejewels.skejewels;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,12 +68,10 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
         nextButton.setOnClickListener(this);
 
         deleteButton = (Button)findViewById(R.id.DeleteButton);
+        deleteButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
 
         newEventName = (EditText)findViewById(R.id.EventNameEditor);
-
-
-
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -85,8 +84,6 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
 
     }
 
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.nextButton:
@@ -101,10 +98,36 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
                     intent.putExtra("newEventName", eventName);
                     startActivity(intent);
                 }
+                break;
+            case R.id.DeleteButton:
+                Log.d("TAG", "Delete Button Has Been Clicked");
+                areYouSureBox();
+                break;
         }
     }
+    public void areYouSureBox(){
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setTitle("Do you really want to delete this event?");
+      builder.setPositiveButton("yes",
+              new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int id) {
+                      new task2().execute();
+                      goToSkejewel();
+                  }
+              });
+      builder.setNegativeButton("no",
+              new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int id) {
+                  }
+              });
+      builder.create().show();
+    }
+    public void goToSkejewel(){
+        Intent intent2 = new Intent(this, Skejewels.class);
+        startActivity(intent2);
 
-    @Override
+    }
+
     public void onFragmentInteraction(View v) {
 
     }
@@ -128,7 +151,6 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
         protected Void doInBackground(String... params) {
 
             String url_select = "http://skejewels.com/Android/GetEventDetails.php?id="+eventId;
-            Log.d(TAG, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url_select);
@@ -180,12 +202,6 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
                 endTime=results[4];
                 repeatType =results[5];
                 visibility=results[6];
-
-                Log.d(TAG, eventName);
-                Log.d(TAG, startTime);
-                Log.d(TAG, endTime);
-                Log.d(TAG, repeatType);
-                Log.d(TAG, visibility);
 
                 newEventName.setText(eventName, TextView.BufferType.EDITABLE);
 
@@ -266,7 +282,7 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
 
         protected void onPostExecute(Void v) {
             try {
-                
+
                 changeActivity();
 
                 this.progressDialog.dismiss();
