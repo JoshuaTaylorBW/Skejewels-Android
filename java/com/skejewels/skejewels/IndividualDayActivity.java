@@ -47,7 +47,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
     private ArrayList<Integer> ids;
-
+    private ArrayList<String> times;
 
     private int month = 6; //which month are we looking at
     private int day = 24;//which day of the month are we looking at
@@ -73,6 +73,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         setContentView(R.layout.individual_day_look);
 
         ids = new ArrayList<Integer>();
+        times = new ArrayList<String>();
 
         Bundle extras = getIntent().getExtras();
         changeIntent = new Intent(this, AddEventActivity.class);
@@ -212,8 +213,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
             TextView box = (TextView) view;
             for (int i = 0; i < ids.size(); i++){
                if(view.getId() == ids.get(i)){
-                 Log.d("check", box.getHint().toString());
-                 goToEditActivity(box.getHint().toString());
+                 goToEditActivity(box.getHint().toString(), box.getText().toString(), times.get(i));
                }
             }
         }
@@ -250,15 +250,19 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             time.setElevation(8);
         }
+        times.add(time.getText().toString());
         layout.addView(time, timeLayoutParams);
         eventsMade++;//add one to eventsMade for positioning.
     }
-    public void goToEditActivity(String id){
+    public void goToEditActivity(String id, String name, String time){
         Intent intent = new Intent(this, IndividualEventActivity.class);
-        Log.d(TAG, "the id is///////////" + id);
         intent.putExtra("eventId", id);
+        intent.putExtra("eventName", name);
+        intent.putExtra("eventDate", topDate.getText());
+        intent.putExtra("eventTime", time);
         startActivity(intent);
     }
+
     public int getTextTopPadding(){
         int yPosition = 0;
        switch (lineAmount){
@@ -308,7 +312,6 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
               startActivity(intent2);
               break;
           case R.id.request_text:
-              Log.d(TAG, "this is being clicked");
               Intent intent4 = new Intent(this, FriendRequests.class);
               startActivity(intent4);
               break;

@@ -52,6 +52,7 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
     private static final String TAG = FriendsIndividualDayActivity.class.getSimpleName();
 
     private ArrayList<Integer> ids;
+    private ArrayList<String> times;
 
     private int month = 6; //which month are we looking at
     private int day = 24;//which day of the month are we looking at
@@ -78,6 +79,7 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
         setContentView(R.layout.individual_day_look);
 
         ids = new ArrayList<Integer>();
+        times = new ArrayList<String>();
 
         Bundle extras = getIntent().getExtras();
         changeIntent = new Intent(this, AddEventActivity.class);
@@ -212,8 +214,7 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
             TextView box = (TextView) view;
             for (int i = 0; i < ids.size(); i++) {
                 if (view.getId() == ids.get(i)) {
-                    Log.d("check", box.getHint().toString());
-                    goToEditActivity(box.getHint().toString());
+                    goToEditActivity(box.getHint().toString(), box.getText().toString(), times.get(i));
                 }
             }
         }
@@ -250,13 +251,17 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             time.setElevation(8);
         }
+        times.add(time.getText().toString());
         layout.addView(time, timeLayoutParams);
         eventsMade++;//add one to eventsMade for positioning.
     }
 
-    public void goToEditActivity(String id) {
+    public void goToEditActivity(String id, String name, String time) {
         Intent intent = new Intent(this, FriendsIndividualEvent.class);
         intent.putExtra("eventId", id);
+        intent.putExtra("eventName", name);
+        intent.putExtra("eventDate", topDate.getText());
+        intent.putExtra("eventTime", time);
         intent.putExtra("friendsName", friendsName);
         startActivity(intent);
     }

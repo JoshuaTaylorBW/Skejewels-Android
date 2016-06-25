@@ -47,6 +47,9 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
     private Toolbar toolbar;
     private int numEventId = 0;
     private String eventId = "2";
+    private String eventName = "";
+    private String eventDate= "";
+    private String eventTime= "";
     private Intent changeIntent;
     private TextView eventExplanation, likeAmount, firstCommentName, secondCommentName, firstComment, secondComment, totalCommentAmount;
     private Button likeButton, commentButton, editButton, homeButton;
@@ -68,13 +71,7 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
         title = (Button) findViewById(R.id.homeButton);
         title.setOnClickListener(this);
 
-        commentButton = (Button) findViewById(R.id.CommentButton);
-        commentButton.setOnClickListener(this);
-
-        likeButton.setOnClickListener(this);
-
-        searchText = (TextView) findViewById(R.id.search_text);
-        searchText.setOnClickListener(this);
+        commentButton = (Button) findViewById(R.id.CommentButton); commentButton.setOnClickListener(this); likeButton.setOnClickListener(this); searchText = (TextView) findViewById(R.id.search_text); searchText.setOnClickListener(this);
 
         requestText = (TextView) findViewById(R.id.request_text);
         requestText.setOnClickListener(this);
@@ -85,10 +82,17 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
+
+
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             eventId = extras.getString("eventId", "ALMOST ANYTHING");
+            eventName = extras.getString("eventName", "an event");
+            eventDate= extras.getString("eventDate", "an event");
+            eventTime = extras.getString("eventTime", "1:00AM - 1:00AM");
         }
+
+        eventExplanation.setText("You are going to " + eventName + " On " + eventDate + " From " + eventTime);
 
         new task().execute();
 

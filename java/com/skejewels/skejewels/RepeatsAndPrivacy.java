@@ -56,7 +56,7 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
     Resources system;
     TextView untilText;
     DatePicker calendar;
-    Spinner repeatType;
+    Spinner repeatType, visibilityType;
     Button NextButton;
     private String eventName;
     private int startingHour;
@@ -67,6 +67,7 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
     private int repeatEndMonth;
     private int repeatEndYear;
     private String typeOfRepeat;
+    private String typeOfVisibility;
     private int month = 6; //which month are we looking at
     private int day = 24;//which day of the month are we looking at
     private int year = 2015;
@@ -99,6 +100,9 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
         notificationText.setOnClickListener(this);
         restartIntent = new Intent(this, Skejewels.class);
         typeOfRepeat = "Once";
+        visibilityType = (Spinner) findViewById(R.id.visibility_spinner);
+        visibilityType.setOnItemSelectedListener(this);
+        typeOfVisibility = "Public";
 
         untilText.setVisibility(View.GONE);
         calendar.setVisibility(View.GONE);
@@ -151,6 +155,7 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
 
     public void onItemSelected(AdapterView<?> parentView,View v,int position,long id){
         String strAge=(String)repeatType.getItemAtPosition(position);
+        String strVisibility=(String)visibilityType.getItemAtPosition(position);
         if(strAge.equals("Weekly") || strAge.equals("Monthly")){
             untilText.setVisibility(View.VISIBLE);
             calendar.setVisibility(View.VISIBLE);
@@ -158,7 +163,6 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
             repeatEndDay = calendar.getDayOfMonth();
             repeatEndMonth = calendar.getMonth();
             repeatEndYear = calendar.getYear();
-            Log.d("TAG", repeatEndDay + " " + repeatEndMonth + " " + repeatEndYear);
         }else{
             untilText.setVisibility(View.GONE);
             calendar.setVisibility(View.GONE);
@@ -167,6 +171,7 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
             repeatEndMonth = 0;
             repeatEndYear = 0;
         }
+        typeOfVisibility = strVisibility;
     }
 
      class task extends AsyncTask<String, String, Void>
@@ -189,8 +194,8 @@ public class RepeatsAndPrivacy extends ActionBarActivity implements View.OnClick
             String newEventName = eventName.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered");
             String url_select="http://skejewels.com/Android/SQLAdd.php?n='" + newEventName +
             "'&sM=" + month + "&sD=" + day + "&sY=" + year + "&sH=" + startingHour + "&sMi=" + startingMinute +
-            "&eM=" + 10 + "&eD=" + 15 + "&eH=" + endingHour   + "&eMi=" + endingMinute +
-            "&rT=" + typeOfRepeat + "&eRM=" + repeatEndMonth + "&eRD="+repeatEndDay + "&eRY=" + repeatEndYear;
+            "&eM=" + month + "&eD=" + day + "&eH=" + endingHour   + "&eMi=" + endingMinute +
+            "&rT=" + typeOfRepeat + "&eRM=" + repeatEndMonth + "&eRD="+repeatEndDay + "&eRY=" + repeatEndYear + "&v=" + typeOfVisibility;
             Log.d("Fuck That Man", url_select);
 
             HttpClient httpClient = new DefaultHttpClient();

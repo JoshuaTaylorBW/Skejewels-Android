@@ -41,16 +41,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-/**
- * Created by joshsparks on 3/2/16.
- */
 public class FriendsIndividualEvent extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener{
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
     private Toolbar toolbar;
     private String friendsName = "Terrence Mullen";
-    private int numEventId = 0;
-    private String eventId = "2";
+    private String eventName = "";
+    private String eventDate= "";
+    private String eventTime= "";
+    //private int numEventId = 0;
+    private String eventId = "0";
     private Intent changeIntent;
     private Button title;
     private TextView searchText, requestText, notificationText;
@@ -87,7 +87,12 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
     if(extras != null){
         eventId = extras.getString("eventId", "ALMOST ANYTHING");
         friendsName = extras.getString("friendsName", "");
+        eventName = extras.getString("eventName", "an event");
+        eventDate= extras.getString("eventDate", "an event");
+        eventTime = extras.getString("eventTime", "1:00AM - 1:00AM");
     }
+
+    eventExplanation.setText(friendsName + " is going to " + eventName + " On " + eventDate + " From " + eventTime.replaceAll("(\\r|\\n)", ""));
 
     new task().execute();
 
@@ -105,7 +110,6 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.homeButton:
-                Log.d(TAG,  "GOT TO HERE :) :) :)");
                 Intent intent = new Intent(this, Skejewels.class);
                 startActivity(intent);
                 break;
@@ -259,7 +263,6 @@ public class FriendsIndividualEvent extends ActionBarActivity implements View.On
               is.close();
               result=sb.toString();
 
-              Log.d(TAG, "got to here now!!!! " + result);
 
           } catch (Exception e) {
               Log.e("log_tag", "Error converting result "+e.toString());

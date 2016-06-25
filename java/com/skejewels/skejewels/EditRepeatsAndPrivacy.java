@@ -58,7 +58,7 @@ import java.util.Date;
 public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener, OnItemSelectedListener   {
 
     Resources system;
-    Spinner repeatType;
+    Spinner repeatType, visibilityType;
     Button NextButton;
     private Intent restartIntent;
     private Button title;
@@ -67,7 +67,7 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
     private String typeOfVisibility;
 
     private String eventId,newEventName, newStartingHour, newStartingMinute, newEndingHour,
-    newEndingMinute, eventRepeat, eventVisibility;
+            newEndingMinute, eventRepeat, eventVisibility;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -90,22 +90,25 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
         notificationText.setOnClickListener(this);
         restartIntent = new Intent(this, Skejewels.class);
 
+        visibilityType = (Spinner) findViewById(R.id.visibility_spinner);
+        typeOfVisibility = "Public";
+
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             eventId = extras.getString("eventId", "no event id");
-            newEventName = extras.getString("newEventName", "newEventName Does Not Exist"); 
-            newStartingHour = extras.getString("newStartingHour", "newStartingHour Does Not Exist"); 
-            newStartingMinute = extras.getString("newStartingMinute", "newStartingMinute Does Not Exist"); 
-            newEndingHour = extras.getString("newEndingHour", "newEndingHour Does Not Exist"); 
+            newEventName = extras.getString("newEventName", "newEventName Does Not Exist");
+            newStartingHour = extras.getString("newStartingHour", "newStartingHour Does Not Exist");
+            newStartingMinute = extras.getString("newStartingMinute", "newStartingMinute Does Not Exist");
+            newEndingHour = extras.getString("newEndingHour", "newEndingHour Does Not Exist");
             newEndingMinute = extras.getString("newEndingMinute", "newEndingMinute Does Not Exist");
         }
 
-        typeOfRepeat = eventRepeat;
+        typeOfRepeat = "Once";
         typeOfVisibility = eventVisibility;
     }
 
     public void onClick(View view) {
-         switch (view.getId()){
+        switch (view.getId()){
             case R.id.nextistButton:
                 new task().execute();
                 break;
@@ -120,11 +123,13 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
 
     public void onItemSelected(AdapterView<?> parentView,View v,int position,long id){
         String strAge=(String)repeatType.getItemAtPosition(position);
+        String strVisibility=(String)visibilityType.getItemAtPosition(position);
         if(strAge.equals("Weekly") || strAge.equals("Monthly")){
             typeOfRepeat = strAge;
         }else{
             typeOfRepeat = strAge;
         }
+        typeOfVisibility = strVisibility;
     }
 
     public void onNothingSelected(AdapterView<?> adapterView) {
@@ -151,9 +156,10 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
             });
         }
         protected Void doInBackground(String... params){
+
             //TODO get day
             String newEventName1 = newEventName.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered");
-            String url_select="http://skejewels.com/Android/SQLEdit.php?id="+eventId+"&eN="+newEventName1+"&sH=10"+newStartingHour+"&sM=15"+newStartingMinute +"&eH="+newEndingHour+"&eM="+newEndingMinute+"&eR="+typeOfRepeat+"&eV="+eventVisibility;
+            String url_select="http://skejewels.com/Android/SQLEdit.php?id="+eventId+"&eN="+newEventName1+"&sH="+newStartingHour+"&sM="+newStartingMinute +"&eH="+newEndingHour+"&eM="+newEndingMinute+"&eR="+typeOfRepeat+"&eV="+typeOfVisibility;
             Log.d("Fuck That Man", url_select);
 
             HttpClient httpClient = new DefaultHttpClient();
@@ -213,5 +219,4 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
             }
         }
     }
-
 }

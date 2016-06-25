@@ -111,7 +111,7 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
       builder.setPositiveButton("yes",
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int id) {
-                      new task2().execute();
+                      new task2().execute() ;
                       goToSkejewel();
                   }
               });

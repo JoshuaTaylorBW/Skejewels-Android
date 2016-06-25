@@ -221,7 +221,11 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
                             scrollLayout.fullScroll(ScrollView.FOCUS_DOWN);
                         }
                     });
+                    this.progressDialog.dismiss();
                 }else{
+                    this.progressDialog.dismiss();
+
+                    Log.d(TAG + "None","NUN O YA");
                     removeFirstComment();
                 }
                 this.progressDialog.dismiss();
