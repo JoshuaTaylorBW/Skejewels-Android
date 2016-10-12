@@ -1,9 +1,11 @@
 package com.skejewels.skejewels;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -45,6 +47,8 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
     private Toolbar toolbar;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    private int userId = 188;
     private int numEventId = 0;
     private String eventId = "2";
     private String eventName = "";
@@ -54,7 +58,7 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
     private TextView eventExplanation, likeAmount, firstCommentName, secondCommentName, firstComment, secondComment, totalCommentAmount;
     private Button likeButton, commentButton, editButton, homeButton;
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -78,11 +82,15 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
 
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
+
+        settingsText = (TextView) findViewById(R.id.setting_text);
+        settingsText.setOnClickListener(this);
+
+        setId();
+
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-
-
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -102,22 +110,26 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
 
     public void onClick(View v) {
         switch (v.getId()){
-          case R.id.homeButton:
-              Intent intent = new Intent(this, Skejewels.class);
-              startActivity(intent);
-              break;
-          case R.id.notification_text:
-              Intent intent3 = new Intent(this, Notifications.class);
-              startActivity(intent3);
-              break;
-          case R.id.search_text:
-              Intent intent2 = new Intent(this, Search.class);
-              startActivity(intent2);
-              break;
-          case R.id.request_text:
-              Intent intent4 = new Intent(this, FriendRequests.class);
-              startActivity(intent4);
-              break;
+            case R.id.homeButton:
+                Intent intent = new Intent(this, Skejewels.class);
+                startActivity(intent);
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
+                break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
+                break;
             case R.id.CommentButton:
                 changeIntent.putExtra("eventID", eventId);
                 startActivity(changeIntent);
@@ -126,8 +138,10 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 Button button = (Button) v;
                 if (button.getText().toString().equals("Like")) {
                     button.setText("Unlike");
+                    new like().execute();
                 } else {
                     button.setText("Like");
+                    new unlike().execute();
                 }
                 break;
             case R.id.EditButton:
@@ -193,8 +207,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 {
                     sb.append(line + "\n");
                     String[] values = line.split("-?-");
-
-
                 }
                 is.close();
                 result=sb.toString();
@@ -216,6 +228,11 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 }
                 if(Integer.parseInt(indivs[2]) > 0){
                     new task2().execute();
+                }
+                for(int i = 3; i < indivs.length - 1; i++){
+                    if(Integer.parseInt(indivs[i]) == userId){
+                        likeButton.setText("Unlike");
+                    }
                 }
 
                 this.progressDialog.dismiss();
@@ -271,9 +288,6 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 while((line=br.readLine())!=null)
                 {
                     sb.append(line + "\n");
-                    String[] values = line.split("-?-");
-
-
                 }
                 is.close();
                 result=sb.toString();
@@ -293,7 +307,10 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 for(int i = 0; i < indivs.length; i++){
                 }
                 int amountOfComments = Integer.parseInt(indivs[1]);
-                if(amountOfComments >= 1){
+                if(amountOfComments == 1){
+                    makeFirstComment(indivs[indivs.length-4], indivs[indivs.length - 3], indivs[indivs.length - 2]);
+                }
+                if(amountOfComments > 1){
                     makeFirstComment(indivs[indivs.length-7], indivs[indivs.length - 6], indivs[indivs.length - 5]);
                 }
                 if(amountOfComments >= 2){
@@ -302,9 +319,9 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 if(amountOfComments > 2){
                     makeRestOfCommentsLink(Integer.parseInt(indivs[1]));
                 }
-                    //Comment = i
-                    //Commenter Name = i+1
-                    //Commenter Id = i+2
+                //Comment = i
+                //Commenter Name = i+1
+                //Commenter Id = i+2
 
 
 
@@ -316,6 +333,140 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
         }
     }
 
+    class like extends AsyncTask<String, String, Void> {
+        private ProgressDialog progressDialog = new ProgressDialog(IndividualEventActivity.this);
+        InputStream is = null ;
+        String result = "";
+        protected void onPreExecute() {
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    like.this.cancel(true);
+                }
+            });
+        }
+        protected Void doInBackground(String... params){
+            String newEventName = eventName.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered").replace("&", "and");
+
+            String url_select="http://skejewels.com/Android/AndroidLike.php?eventId=" + eventId + "&eventName=" + newEventName + "&UserId=" + userId;
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
+
+
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is =  httpEntity.getContent();
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+            }
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while((line=br.readLine())!=null)
+                {
+                    sb.append(line + "\n");
+                    String[] values = line.split("-?-");
+
+
+                }
+                is.close();
+                result=sb.toString();
+
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result "+e.toString());
+            }
+
+            return null;
+
+        }
+        private int eventNumber = 0;
+        protected void onPostExecute(Void v){
+            try {
+                this.progressDialog.dismiss();
+
+            }catch(Exception e){
+                Log.e("log_tag", "Error parsing data "+e.toString());
+            }
+        }
+    }
+
+    class unlike extends AsyncTask<String, String, Void> {
+        private ProgressDialog progressDialog = new ProgressDialog(IndividualEventActivity.this);
+        InputStream is = null ;
+        String result = "";
+        protected void onPreExecute() {
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    unlike.this.cancel(true);
+                }
+            });
+        }
+        protected Void doInBackground(String... params){
+
+            String url_select="http://skejewels.com/Android/AndroidUnlike.php?eventId=" + eventId + "&UserId=" + userId;
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
+
+
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is =  httpEntity.getContent();
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+            }
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while((line=br.readLine())!=null)
+                {
+                    sb.append(line + "\n");
+                    String[] values = line.split("-?-");
+
+
+                }
+                is.close();
+                result=sb.toString();
+
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result "+e.toString());
+            }
+
+            return null;
+
+        }
+        private int eventNumber = 0;
+        protected void onPostExecute(Void v){
+            try {
+                this.progressDialog.dismiss();
+
+            }catch(Exception e){
+                Log.e("log_tag", "Error parsing data "+e.toString());
+            }
+        }
+    }
     public void makeFirstComment(String comment, String commenterName, String commenterId){
         firstComment.setText(comment);
         firstCommentName.setText(commenterName);
@@ -338,6 +489,12 @@ public class IndividualEventActivity extends ActionBarActivity implements View.O
                 startActivity(changeIntent);
             }
         });
+    }
+
+    private void setId() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String defaultValue = "NO ID";
+        userId = Integer.parseInt(sharedPreferences.getString("current_user_id", defaultValue));
     }
 
 }

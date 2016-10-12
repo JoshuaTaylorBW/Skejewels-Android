@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
@@ -46,6 +47,9 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     private Toolbar toolbar;
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
+    private int userId = 188;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
     private ArrayList<Integer> ids;
     private ArrayList<String> times;
 
@@ -61,7 +65,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     private LinearLayout layout;
     private LinearLayout.LayoutParams layoutParams, timeLayoutParams;
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
 
     private TextView topDate;//date that appears at top of screen.
 
@@ -71,6 +75,8 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.individual_day_look);
+
+        setId();
 
         ids = new ArrayList<Integer>();
         times = new ArrayList<String>();
@@ -101,6 +107,9 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
 
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
+
+        settingsText = (TextView) findViewById(R.id.setting_text);
+        settingsText.setOnClickListener(this);
 
         layout = (LinearLayout)findViewById(R.id.EventsLayout);
 
@@ -212,9 +221,9 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         public void onClick(View view) {
             TextView box = (TextView) view;
             for (int i = 0; i < ids.size(); i++){
-               if(view.getId() == ids.get(i)){
-                 goToEditActivity(box.getHint().toString(), box.getText().toString(), times.get(i));
-               }
+                if(view.getId() == ids.get(i)){
+                    goToEditActivity(box.getHint().toString(), box.getText().toString(), times.get(i));
+                }
             }
         }
     };
@@ -265,25 +274,25 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
 
     public int getTextTopPadding(){
         int yPosition = 0;
-       switch (lineAmount){
-           case 1:
-            yPosition = 0;
-            break;
-           case 2:
-               yPosition = 0;
-               break;
-           case 3:
-               yPosition = 100;
-               break;
-           case 4:
-               yPosition = 40;
-               break;
-       }
+        switch (lineAmount){
+            case 1:
+                yPosition = 0;
+                break;
+            case 2:
+                yPosition = 0;
+                break;
+            case 3:
+                yPosition = 100;
+                break;
+            case 4:
+                yPosition = 40;
+                break;
+        }
         return yPosition;
     }
     public int getTimeTopPadding(){
-       int yPosition = 0;
-       return 500 + (eventsMade + 570);
+        int yPosition = 0;
+        return 500 + (eventsMade + 570);
     }
     public String wrapEventName(String s){
         StringBuilder sb = new StringBuilder(s);
@@ -299,22 +308,26 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
 
     public void onClick(View v) {
         switch (v.getId()){
-          case R.id.homeButton:
-              Intent intent = new Intent(this, Skejewels.class);
-              startActivity(intent);
-              break;
-          case R.id.notification_text:
-              Intent intent3 = new Intent(this, Notifications.class);
-              startActivity(intent3);
-              break;
-          case R.id.search_text:
-              Intent intent2 = new Intent(this, Search.class);
-              startActivity(intent2);
-              break;
-          case R.id.request_text:
-              Intent intent4 = new Intent(this, FriendRequests.class);
-              startActivity(intent4);
-              break;
+            case R.id.homeButton:
+                Intent intent = new Intent(this, Skejewels.class);
+                startActivity(intent);
+                break;
+            case R.id.notification_text:
+                Intent intent3 = new Intent(this, Notifications.class);
+                startActivity(intent3);
+                break;
+            case R.id.search_text:
+                Intent intent2 = new Intent(this, Search.class);
+                startActivity(intent2);
+                break;
+            case R.id.request_text:
+                Intent intent4 = new Intent(this, FriendRequests.class);
+                startActivity(intent4);
+                break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
+                break;
         }
     }
 
@@ -333,36 +346,36 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         }
         protected Void doInBackground(String... params){
 
-        String url_select="http://skejewels.com/Android/PrintEventsOfDay.php?Month=" + (month) + "&Day=" + day + "&Year=" + year;
+            String url_select="http://skejewels.com/Android/PrintEventsOfDay.php?UserId=" + userId + "&Month=" + (month) + "&Day=" + day + "&Year=" + year;
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(url_select);
-
-
-        ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
-
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(param));
-
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity httpEntity = httpResponse.getEntity();
-
-                    //read content
-            is =  httpEntity.getContent();
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
 
 
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is =  httpEntity.getContent();
 
 
-        } catch (Exception e) {
 
-            Log.e("log_tag", "Error in http connection " + e.toString());
-            //Toast.makeText(Skejewels.this, "Please Try Again", Toast.LENGTH_LONG).show();
-        }
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line = "";
-            while((line=br.readLine())!=null)
+
+            } catch (Exception e) {
+
+                Log.e("log_tag", "Error in http connection " + e.toString());
+                //Toast.makeText(Skejewels.this, "Please Try Again", Toast.LENGTH_LONG).show();
+            }
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while((line=br.readLine())!=null)
                 {
                     sb.append(line + "\n");
                     String[] values = line.split("-?-");
@@ -374,11 +387,11 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
 
                 Log.d(TAG, "got to here now!!!! " + result);
 
-        } catch (Exception e) {
-            Log.e("log_tag", "Error converting result "+e.toString());
-        }
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result "+e.toString());
+            }
 
-        return null;
+            return null;
 
         }
         private int eventNumber = 0;
@@ -408,7 +421,7 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         }
     }
 
-   //WHATEVER STUFF.
+    //WHATEVER STUFF.
     public void onFragmentInteraction(View v) {
     }
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -433,4 +446,9 @@ public class IndividualDayActivity extends ActionBarActivity implements View.OnC
         return false;
     }
 
+    private void setId() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String defaultValue = "NO ID";
+        userId = Integer.parseInt(sharedPreferences.getString("current_user_id", defaultValue));
+    }
 }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -41,11 +42,12 @@ import java.util.ArrayList;
  */
 public class Notifications extends AppCompatActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener{
     private Toolbar toolbar;
+    public static final String MyPREFERENCES = "MyPrefs" ;
     private TextView addBox, nicknameBox, wantsToText;
     private int lastBoxId;
     private RelativeLayout layout;
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
     private int  userId = 188;
     private RelativeLayout.LayoutParams acceptButtonParams, declineButtonParams, mainParams, nicknameParams, wantsToParams;
 
@@ -69,6 +71,12 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
 
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
+
+        settingsText = (TextView) findViewById(R.id.setting_text);
+        settingsText.setOnClickListener(this);
+
+        setId();
+
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
@@ -94,7 +102,7 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
 
     public void makeCard(String usersId, String UsersName, String message, String eventId){
         mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        mainParams.setMargins((int)pxFromDp(getApplicationContext(), 2),(int)pxFromDp(getApplicationContext(), 10),(int)pxFromDp(getApplicationContext(), 5), 0);
+        mainParams.setMargins((int)pxFromDp(getApplicationContext(), 0),(int)pxFromDp(getApplicationContext(), 10),(int)pxFromDp(getApplicationContext(), 0), 0);
         mainParams.addRule(RelativeLayout.BELOW, lastBoxId);
         mainParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         mainParams.addRule(RelativeLayout.ALIGN_PARENT_START);
@@ -147,6 +155,10 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
             case R.id.request_text:
                 Intent intent4 = new Intent(this, FriendRequests.class);
                 startActivity(intent4);
+                break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
                 break;
         }
     }
@@ -263,6 +275,11 @@ public class Notifications extends AppCompatActivity implements NavigationDrawer
 
         public void onFragmentInteraction(View v) {
 
+    }
+    private void setId() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String defaultValue = "NO ID";
+        userId = Integer.parseInt(sharedPreferences.getString("current_user_id", defaultValue));
     }
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;

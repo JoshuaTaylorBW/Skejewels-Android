@@ -158,7 +158,7 @@ public class EditRepeatsAndPrivacy  extends ActionBarActivity implements View.On
         protected Void doInBackground(String... params){
 
             //TODO get day
-            String newEventName1 = newEventName.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered");
+            String newEventName1 = newEventName.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered").replace("&", "and");
             String url_select="http://skejewels.com/Android/SQLEdit.php?id="+eventId+"&eN="+newEventName1+"&sH="+newStartingHour+"&sM="+newStartingMinute +"&eH="+newEndingHour+"&eM="+newEndingMinute+"&eR="+typeOfRepeat+"&eV="+typeOfVisibility;
             Log.d("Fuck That Man", url_select);
 

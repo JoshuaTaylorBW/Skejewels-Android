@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -79,9 +80,11 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
     private String what;
     private String[] friends;
     private ArrayList<String> ids;
+    public static final String MyPREFERENCES = "MyPrefs" ;
     private ArrayList<Integer> nameIds; //used for onclicklistener
     private RelativeLayout.LayoutParams checkParams, nicknameParams, actualNameParams;
     private int lastNicknameId;
+    private int currId = 188;
     final Context context = this;
 
     private Button title;
@@ -103,6 +106,9 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
 
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
+
+        setId();
+
         nameIds = new ArrayList<Integer>();
         eventNameEditor.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -339,7 +345,7 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
         }
         protected Void doInBackground(String... params){
 
-        String url_select="http://skejewels.com/Android/AndroidSearch.php?cId=188&q=" + what.replaceAll("\\s+","%20");
+        String url_select="http://skejewels.com/Android/AndroidSearch.php?cId=" + currId + "&q=" + what.replaceAll("\\s+","%20");
         Log.d("search", url_select);
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -455,5 +461,11 @@ public class Search extends ActionBarActivity implements View.OnClickListener, N
 
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
+    }
+
+    private void setId() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String defaultValue = "NO ID";
+        currId = Integer.parseInt(sharedPreferences.getString("current_user_id", defaultValue));
     }
 }

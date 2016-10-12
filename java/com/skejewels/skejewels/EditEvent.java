@@ -42,7 +42,7 @@ public class EditEvent  extends ActionBarActivity implements View.OnClickListene
     private Button nextButton, deleteButton;
     private EditText newEventName;
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
     private static final String TAG = Skejewels.class.getSimpleName();
 
 

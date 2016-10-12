@@ -2,12 +2,15 @@ package com.skejewels.skejewels;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +19,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,6 +34,9 @@ import android.widget.TextView;
 import com.basiccalc.slidenerdtut.Skejewels;
 import com.basiccalc.slidenerdtut.NavigationDrawerFragment;
 import com.basiccalc.slidenerdtut.R;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -46,40 +53,83 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-
 /**
  * Created by j80ma_000 on 10/15/2015.
  */
-public class IndividualDayAllComments extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener{
+public class IndividualDayAllComments extends ActionBarActivity implements View.OnClickListener, NavigationDrawerFragment.OnFragmentInteractionListener, View.OnTouchListener {
     private static final String TAG = IndividualDayActivity.class.getSimpleName();
 
     private Toolbar toolbar;
+    private int amountOfComments = 0;
+    public static final String MyPREFERENCES = "MyPrefs" ;
     private int eventId = 157;
     private Intent changeIntent;
     private TextView firstCommentName, secondCommentName, firstComment, secondComment;
+    private EditText commentEntry;
     private Button likeButton, commentButton, editButton, homeButton;
     private LinearLayout layout;
     private LinearLayout.LayoutParams layoutParams, commentLayoutParams;
     private TextView name, indivComment;
     private ScrollView scrollLayout;
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
+    private String theComment = "";
+    private String currentUsersName = "Josh Sparks";
+    private String currentNickName = "JoshuaTaylor8";
+    private String currentUserId = "188";
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acivity_individual_day_comments);
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             eventId = Integer.parseInt(extras.getString("eventID", "157"));
         }
 
-        toolbar=(Toolbar)findViewById(R.id.app_bar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         //Declare all TextViews
-       firstCommentName = (TextView) findViewById(R.id.FirstCommentName);firstComment = (TextView) findViewById(R.id.FirstComment);
+        commentEntry = (EditText) findViewById(R.id.commentEntry);
+        commentEntry.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            if (amountOfComments > 0) {
+                                makeNextComment(commentEntry.getText().toString(), currentUsersName, currentUserId);
+                                theComment = commentEntry.getText().toString();
+                                new AddComment().execute();
+                                commentEntry.setText("");
+                                theComment = "";
+                                amountOfComments++;
+                            } else {
+                                makeFirstComment(commentEntry.getText().toString(), currentUsersName, currentUserId);
+                                theComment = commentEntry.getText().toString();
+                                new AddComment().execute();
+                                commentEntry.setText("");
+                                theComment = "";
+                                amountOfComments++;
+                            }
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+        firstCommentName = (TextView) findViewById(R.id.FirstCommentName);
+        firstComment = (TextView) findViewById(R.id.FirstComment);
         //Declare all Buttons
-        editButton = (Button) findViewById(R.id.EditButton); homeButton = (Button) findViewById(R.id.homeButton);
+        editButton = (Button) findViewById(R.id.EditButton);
+        homeButton = (Button) findViewById(R.id.homeButton);
         scrollLayout = (ScrollView) findViewById(R.id.ScrollView01);
 
         title = (Button) findViewById(R.id.homeButton);
@@ -91,8 +141,13 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         requestText = (TextView) findViewById(R.id.request_text);
         requestText.setOnClickListener(this);
 
+        settingsText = (TextView) findViewById(R.id.setting_text);
+        settingsText.setOnClickListener(this);
+
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
+
+        setId();
 
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -100,19 +155,22 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
 
         changeIntent = new Intent(this, Skejewels.class);
         new task2().execute();
-        layout = (LinearLayout)findViewById(R.id.EventsLayout);
+        layout = (LinearLayout) findViewById(R.id.EventsLayout);
 
         layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);//Create new dynamic layout
         layoutParams.setMargins(0, 30, 0, 0);//Set initial positions
         commentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);//Create new dynamic layout
         commentLayoutParams.setMargins(0, 0, 0, 0);//Set initial positions
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.homeButton:
-                Log.d(TAG,  "GOT TO HERE :) :) :)");
+                Log.d(TAG, "GOT TO HERE :) :) :)");
                 Intent intent = new Intent(this, Skejewels.class);
                 startActivity(intent);
                 break;
@@ -129,6 +187,10 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
                 Intent intent4 = new Intent(this, FriendRequests.class);
                 startActivity(intent4);
                 break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
+                break;
         }
     }
 
@@ -140,21 +202,63 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         return false;
     }
 
-    class task2 extends AsyncTask<String, String, Void> {
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "IndividualDayAllComments Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.skejewels.skejewels/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "IndividualDayAllComments Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.skejewels.skejewels/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
+    class AddComment extends AsyncTask<String, String, Void> {
         private ProgressDialog progressDialog = new ProgressDialog(IndividualDayAllComments.this);
-        InputStream is = null ;
+        InputStream is = null;
         String result = "";
+
         protected void onPreExecute() {
             progressDialog.show();
             progressDialog.setOnCancelListener(new OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
-                    task2.this.cancel(true);
+                    AddComment.this.cancel(true);
                 }
             });
         }
-        protected Void doInBackground(String... params){
 
-            String url_select="http://skejewels.com/Android/printEventComments.php?EventId=" + eventId;
+        protected Void doInBackground(String... params) {
+            String newComment = theComment.replaceAll("\\s+", "JambaSlammerCameraManForNothingEverMattered");
+            String url_select = "http://skejewels.com/Android/AndroidAddComment.php?statusId=" + eventId + "&comment=" + newComment + "&FirstNames=" + currentUsersName.split(" ")[0] + "&LastNames=" + currentUsersName.split(" ")[1] + "&Nickname=" + currentNickName + "&UserId=" + currentUserId;
 
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url_select);
@@ -169,9 +273,67 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
                 HttpEntity httpEntity = httpResponse.getEntity();
 
                 //read content
-                is =  httpEntity.getContent();
+                is = httpEntity.getContent();
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+            }
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                StringBuilder sb = new StringBuilder();
+                String line = "";
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                is.close();
+                result = sb.toString();
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result " + e.toString());
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void v) {
+            try {
+                this.progressDialog.dismiss();
+            } catch (Exception e) {
+                Log.e("log_tag", "Error parsing data " + e.toString());
+            }
+        }
+    }
+
+    class task2 extends AsyncTask<String, String, Void> {
+        private ProgressDialog progressDialog = new ProgressDialog(IndividualDayAllComments.this);
+        InputStream is = null;
+        String result = "";
+
+        protected void onPreExecute() {
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    task2.this.cancel(true);
+                }
+            });
+        }
+
+        protected Void doInBackground(String... params) {
+
+            String url_select = "http://skejewels.com/Android/printEventComments.php?EventId=" + eventId;
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
 
 
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is = httpEntity.getContent();
 
 
             } catch (Exception e) {
@@ -183,34 +345,32 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 StringBuilder sb = new StringBuilder();
                 String line = "";
-                while((line=br.readLine())!=null)
-                {
+                while ((line = br.readLine()) != null) {
                     sb.append(line + "\n");
                     String[] values = line.split("-?-");
 
 
                 }
                 is.close();
-                result=sb.toString();
+                result = sb.toString();
 
                 Log.d(TAG, "got to here now!!!! " + result);
 
             } catch (Exception e) {
-                Log.e("log_tag", "Error converting result "+e.toString());
+                Log.e("log_tag", "Error converting result " + e.toString());
             }
 
             return null;
 
         }
+
         private int eventNumber = 0;
-        protected void onPostExecute(Void v){
+
+        protected void onPostExecute(Void v) {
             try {
                 String[] indivs = result.split("pampurppampurpampurp");
-                if(Integer.parseInt(indivs[1]) > 0) {
-                    for (int i = 0; i < indivs.length; i++) {
-                        Log.d(TAG + "Second", "" + i + "=" + indivs[i]);
-                    }
-                    int amountOfComments = Integer.parseInt(indivs[1]);
+                if (Integer.parseInt(indivs[1]) > 0) {
+                    amountOfComments = Integer.parseInt(indivs[1]);
                     makeFirstComment(indivs[2], indivs[3], indivs[4]);
 
                     for (int i = 5; i < indivs.length - 1; i += 3) {
@@ -222,30 +382,33 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
                         }
                     });
                     this.progressDialog.dismiss();
-                }else{
+                } else {
                     this.progressDialog.dismiss();
 
-                    Log.d(TAG + "None","NUN O YA");
+                    Log.d(TAG + "None", "NUN O YA");
                     removeFirstComment();
                 }
                 this.progressDialog.dismiss();
 
-            }catch(Exception e){
-                Log.e("log_tag", "Error parsing data "+e.toString());
+            } catch (Exception e) {
+                Log.e("log_tag", "Error parsing data " + e.toString());
             }
         }
     }
-    public void makeFirstComment(String comment, String commenterName, String commenterId){
+
+    public void makeFirstComment(String comment, String commenterName, String commenterId) {
         firstComment.setText(comment);
         firstCommentName.setText(commenterName);
         firstCommentName.setHint(commenterId);
     }
-    public void removeFirstComment(){
+
+    public void removeFirstComment() {
         firstComment.setText("");
         firstCommentName.setText("");
         firstCommentName.setHint(0);
     }
-    public void makeNextComment(String comment, String commenterName, String commenterId){
+
+    public void makeNextComment(String comment, String commenterName, String commenterId) {
         name = new TextView(IndividualDayAllComments.this);
         name.setTextSize(18);
         name.setTypeface(null, Typeface.BOLD);
@@ -275,8 +438,11 @@ public class IndividualDayAllComments extends ActionBarActivity implements View.
         layout.addView(indivComment, layoutParams);//add the box to the layout
 
 
-
     }
 
-
+    private void setId() {
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String defaultValue = "NO ID";
+        currentUserId = sharedPreferences.getString("current_user_id", defaultValue);
+    }
 }

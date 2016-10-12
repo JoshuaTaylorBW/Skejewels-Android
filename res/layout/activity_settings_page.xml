@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F2F3">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ThirdLayout">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/homeButton"
+            android:layout_above="@+id/EventExplanation"
+            android:layout_centerHorizontal="true"
+            style="?android:attr/borderlessButtonStyle"
+            android:width="0dp"
+            android:height="0px"
+            android:maxWidth="0dp"
+            android:maxHeight="0dp"
+            android:visibility="visible"
+            android:background="@color/primaryColor" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/jewelButton"
+            android:src="@drawable/jewel"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/homeButton"
+            android:layout_alignEnd="@+id/homeButton"
+            android:layout_alignLeft="@+id/homeButton"
+            android:layout_alignStart="@+id/homeButton"
+            android:layout_alignBottom="@+id/app_bar" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_lines"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:paddingTop="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="MY ACCOUNT"
+            android:id="@+id/textView7"
+            android:layout_below="@+id/app_bar"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/primaryColor"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp" />
+        <View android:background="@color/primaryColor"
+            android:layout_width = "fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/textView7"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/view" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Name"
+            android:id="@+id/textView8"
+            android:textColor="#000000"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:layout_below="@+id/textView7"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="Joshua Sparks"
+            android:id="@+id/NameText"
+            android:layout_below="@+id/textView8"
+            android:layout_alignParentStart="true"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/lightGray" />
+
+        <View android:background="@color/veryLightGray"
+            android:layout_width = "fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/view2"
+            android:layout_below="@+id/NameText"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Username"
+            android:id="@+id/textView10"
+            android:textColor="#000000"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:layout_below="@+id/view2"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="JoshuaTaylor8"
+            android:id="@+id/UsernameText"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/lightGray"
+            android:layout_below="@+id/textView10"
+            android:layout_alignParentStart="true" />
+        <View android:background="@color/veryLightGray"
+            android:layout_width = "fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/view3"
+            android:layout_below="@+id/UsernameText"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Email"
+            android:id="@+id/textView12"
+            android:textColor="#000000"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:layout_below="@+id/view3"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="j80mar4@gmail.com"
+            android:id="@+id/EmailText"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/lightGray"
+            android:layout_below="@+id/textView12"
+            android:layout_alignParentStart="true" />
+
+        <View android:background="@color/veryLightGray"
+            android:layout_width = "fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/view4"
+            android:layout_below="@+id/EmailText"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Phone Number"
+            android:id="@+id/textView14"
+            android:textColor="#000000"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:layout_below="@+id/view4"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="+1-303-919-7093"
+            android:id="@+id/PhoneText"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/lightGray"
+            android:layout_below="@+id/textView14"
+            android:layout_alignParentStart="true" />
+
+        <View android:background="@color/veryLightGray"
+            android:layout_width = "fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/view5"
+            android:layout_below="@+id/PhoneText"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Public Account"
+            android:id="@+id/textView16"
+            android:textColor="#000000"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:layout_alignTop="@+id/view5"
+            android:layout_alignParentStart="true" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/PublicCheckBox"
+            android:checked="false"
+            android:buttonTint="#000000"
+            android:singleLine="false"
+            android:clickable="false"
+            android:elegantTextHeight="false"
+            android:enabled="false"
+            android:focusable="false"
+            android:layout_below="@+id/view5"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:id="@+id/LogoutButton"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:background="@color/primaryColor" />
+
+    </RelativeLayout>
+</android.support.v4.widget.DrawerLayout>

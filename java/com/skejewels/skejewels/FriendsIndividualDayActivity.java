@@ -59,7 +59,7 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
     private int year = 2015;
 
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
 
     //BOXES
     LayoutParams firstLayout, otherLayout;//first layout is for the first Box and otherLayout is the layout for all other boxes.
@@ -100,6 +100,9 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
 
         title = (Button) findViewById(R.id.homeButton);
         title.setOnClickListener(this);
+
+        settingsText = (TextView) findViewById(R.id.setting_text);
+        settingsText.setOnClickListener(this);
 
         layout = (LinearLayout) findViewById(R.id.EventsLayout);
 
@@ -322,6 +325,10 @@ public class FriendsIndividualDayActivity extends ActionBarActivity implements V
                 Intent intent = new Intent(this, Skejewels.class);
                 startActivity(intent);
                 Log.d(TAG, "Worked");
+                break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
                 break;
         }
     }

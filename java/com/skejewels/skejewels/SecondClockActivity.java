@@ -59,7 +59,7 @@ public class SecondClockActivity extends ActionBarActivity implements View.OnCli
     private int year = 2015;
 
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
 
 
     public void onCreate(Bundle savedInstanceState){
@@ -78,6 +78,9 @@ public class SecondClockActivity extends ActionBarActivity implements View.OnCli
 
         requestText = (TextView) findViewById(R.id.request_text);
         requestText.setOnClickListener(this);
+
+        settingsText = (TextView) findViewById(R.id.setting_text);
+        settingsText.setOnClickListener(this);
 
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
@@ -111,6 +114,10 @@ public class SecondClockActivity extends ActionBarActivity implements View.OnCli
               Intent intent4 = new Intent(this, FriendRequests.class);
               startActivity(intent4);
               break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
+                break;
             case R.id.nexterButton:
                 Intent intent8 = new Intent(this, RepeatsAndPrivacy.class);
                  intent8.putExtra("EventName", eventName);

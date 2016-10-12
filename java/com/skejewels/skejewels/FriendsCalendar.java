@@ -70,7 +70,7 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
   Date date;
   String dateString;
     private Button title;
-    private TextView searchText, requestText, notificationText;
+    private TextView searchText, requestText, notificationText, settingsText;
 
   public void onCreate(Bundle savedInstanceState){
       super.onCreate(savedInstanceState);
@@ -96,6 +96,8 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
       notificationText = (TextView) findViewById(R.id.notification_text);
       notificationText.setOnClickListener(this);
 
+      settingsText = (TextView) findViewById(R.id.setting_text);
+      settingsText.setOnClickListener(this);
 
       searchText = (TextView) findViewById(R.id.search_text);
       searchText.setOnClickListener(this);
@@ -134,6 +136,10 @@ public class FriendsCalendar extends ActionBarActivity implements View.OnClickLi
               Intent intent4 = new Intent(this, FriendRequests.class);
               startActivity(intent4);
               break;
+            case R.id.setting_text:
+                Intent intent5 = new Intent(this, SettingsActivity.class);
+                startActivity(intent5);
+                break;
 
             case R.id.nextMonthClickable:
                 rows.clear();

@@ -4,12 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -42,14 +44,21 @@ import java.util.ArrayList;
 /**
  * Created by j80ma_000 on 3/20/2016.
  */
-public class FriendRequests extends AppCompatActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener{
+public class FriendRequests extends AppCompatActivity implements NavigationDrawerFragment.OnFragmentInteractionListener, View.OnClickListener, View.OnTouchListener {
     private Toolbar toolbar;
+    private long mLastClickTime = 0;
     private TextView addBox, nicknameBox, wantsToText;
     private Button acceptButton, declineButton;
+    private View.OnClickListener FriendRequestListener;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    private int requesterId = 188;
     private int lastBoxId;
-    private int  userId = 188;
+    private int userId = 188;
     private RelativeLayout layout;
     private RelativeLayout.LayoutParams acceptButtonParams, declineButtonParams, mainParams, nicknameParams, wantsToParams;
+    private ArrayList<Integer> requestButtonIds = new ArrayList<Integer>();
+    private ArrayList<Integer> requesterIds = new ArrayList<Integer>();
+    private ArrayList<Integer> ids = new ArrayList<Integer>();
     private Button title;
     private TextView searchText, requestText, notificationText;
 
@@ -60,7 +69,7 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        layout = (RelativeLayout)findViewById(R.id.cardholder);
+        layout = (RelativeLayout) findViewById(R.id.cardholder);
 
         title = (Button) findViewById(R.id.homeButton);
         title.setOnClickListener(this);
@@ -74,6 +83,8 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         notificationText = (TextView) findViewById(R.id.notification_text);
         notificationText.setOnClickListener(this);
 
+        FriendRequestListener = getFriendRequestListener();
+
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
@@ -81,9 +92,10 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         new task().execute();
         lastBoxId = R.id.textView4;
 
+
     }
 
-    public void removeFirstBox(){
+    public void removeFirstBox() {
         TextView first = (TextView) findViewById(R.id.textView4);
 
         TextView second = (TextView) findViewById(R.id.textView5);
@@ -97,22 +109,34 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         fifth.setVisibility(View.INVISIBLE);
     }
 
-    public void makeFirstCard(String usersId, String UsersName, String UsersNickname){
+    public void makeFirstCard(String usersId, String UsersName, String UsersNickname) {
         TextView first = (TextView) findViewById(R.id.textView4);
+        ids.add(first.getId());
+        first.setOnClickListener(FriendRequestListener);
         TextView second = (TextView) findViewById(R.id.textView5);
+        ids.add(second.getId());
+        second.setOnClickListener(FriendRequestListener);
         TextView third = (TextView) findViewById(R.id.textView6);
+        ids.add(third.getId());
+        third.setOnClickListener(FriendRequestListener);
         Button fourth = (Button) findViewById(R.id.button);
+        ids.add(fourth.getId());
+        requestButtonIds.add(fourth.getId());
+        fourth.setOnClickListener(FriendRequestListener);
         Button fifth = (Button) findViewById(R.id.button2);
+        ids.add(fifth.getId());
+        requestButtonIds.add(fifth.getId());
+        fifth.setOnClickListener(FriendRequestListener);
 
         first.setText(UsersName);
         third.setText("@" + UsersNickname);
 
-
+        requesterIds.add(Integer.parseInt(usersId));
     }
 
-    public void makeCard(String usersId, String UsersName, String UsersNickname){
+    public void makeCard(String usersId, String UsersName, String UsersNickname) {
         mainParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        mainParams.setMargins((int)pxFromDp(getApplicationContext(), 2),(int)pxFromDp(getApplicationContext(), 10),(int)pxFromDp(getApplicationContext(), 5), 0);
+        mainParams.setMargins((int) pxFromDp(getApplicationContext(), 0), (int) pxFromDp(getApplicationContext(), 10), (int) pxFromDp(getApplicationContext(), 0), 0);
         mainParams.addRule(RelativeLayout.BELOW, lastBoxId);
         mainParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         mainParams.addRule(RelativeLayout.ALIGN_PARENT_START);
@@ -122,7 +146,8 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         addBox.setGravity(Gravity.CENTER_HORIZONTAL);
         addBox.setText(UsersName);
         addBox.setId(View.generateViewId());
-        addBox.setPadding(0, 0, 0, (int)pxFromDp(getApplicationContext(), 125));//Set padding of box. (Left, top, right, bottom)
+        ids.add(addBox.getId());
+        addBox.setPadding(0, 0, 0, (int) pxFromDp(getApplicationContext(), 125));//Set padding of box. (Left, top, right, bottom)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             addBox.setElevation(2);
         }
@@ -130,7 +155,7 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         lastBoxId = addBox.getId();
 
         nicknameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        nicknameParams.setMargins(0, (int)pxFromDp(getApplicationContext(), 21), 0, 0);
+        nicknameParams.setMargins(0, (int) pxFromDp(getApplicationContext(), 21), 0, 0);
         nicknameParams.addRule(RelativeLayout.ALIGN_TOP, lastBoxId);
         nicknameParams.addRule(Gravity.CENTER);
         nicknameBox = new TextView(FriendRequests.this);
@@ -139,14 +164,15 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         nicknameBox.setGravity(Gravity.CENTER_HORIZONTAL);
         nicknameBox.setText("@" + UsersNickname);
         nicknameBox.setId(View.generateViewId());
-        nicknameBox.setPadding(0, 0, 0, (int)pxFromDp(getApplicationContext(), 125));//Set padding of box. (Left, top, right, bottom)
+        ids.add(nicknameBox.getId());
+        nicknameBox.setPadding(0, 0, 0, (int) pxFromDp(getApplicationContext(), 125));//Set padding of box. (Left, top, right, bottom)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nicknameBox.setElevation(4);
         }
         layout.addView(nicknameBox, nicknameParams);
 
         wantsToParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        wantsToParams.setMargins(0, (int)pxFromDp(getApplicationContext(), 21), 0, 0);
+        wantsToParams.setMargins(0, (int) pxFromDp(getApplicationContext(), 21), 0, 0);
         wantsToParams.addRule(RelativeLayout.ALIGN_TOP, nicknameBox.getId());
         wantsToParams.addRule(Gravity.CENTER);
         wantsToText = new TextView(FriendRequests.this);
@@ -155,7 +181,8 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         wantsToText.setGravity(Gravity.CENTER_HORIZONTAL);
         wantsToText.setText("Wants to be your \n friend");
         wantsToText.setId(View.generateViewId());
-        wantsToText.setPadding(0, 0, 0, (int)pxFromDp(getApplicationContext(), 0));//Set padding of box. (Left, top, right, bottom)
+        ids.add(wantsToText.getId());
+        wantsToText.setPadding(0, 0, 0, (int) pxFromDp(getApplicationContext(), 0));//Set padding of box. (Left, top, right, bottom)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             wantsToText.setElevation(4);
         }
@@ -168,32 +195,40 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         declineButton.setTextColor(Color.parseColor("#494949"));
         declineButton.setText("Decline");
         declineButton.setBackgroundResource(R.drawable.button_border);
+        declineButton.setId(View.generateViewId());
+        ids.add(declineButton.getId());
+        declineButton.setOnClickListener(FriendRequestListener);
         declineButton.setGravity(Gravity.CENTER_HORIZONTAL);
+        requestButtonIds.add(declineButton.getId());
         //declineButtonParams.setMargins(0,0,(int)pxFromDp(getApplicationContext(), 30),0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             declineButton.setElevation(0);
         }
         layout.addView(declineButton, declineButtonParams);
 
-        acceptButtonParams= new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        acceptButtonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         acceptButtonParams.addRule(RelativeLayout.BELOW, wantsToText.getId());
         acceptButtonParams.addRule(RelativeLayout.ALIGN_START, R.id.textView5);
         acceptButtonParams.addRule(RelativeLayout.ALIGN_END, R.id.textView5);
-        acceptButtonParams.setMargins((int)pxFromDp(getApplicationContext(), 20),0,0,0);
+        acceptButtonParams.setMargins((int) pxFromDp(getApplicationContext(), 20), 0, 0, 0);
         acceptButton = new Button(FriendRequests.this);
         acceptButton.setTextColor(Color.parseColor("#ffffff"));
+        acceptButton.setOnClickListener(FriendRequestListener);
         acceptButton.setText("Accept");
+        acceptButton.setId(View.generateViewId());
+        ids.add(acceptButton.getId());
         acceptButton.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+        requestButtonIds.add(acceptButton.getId());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             acceptButton.setElevation(0);
         }
         layout.addView(acceptButton, acceptButtonParams);
 
-
+        requesterIds.add(Integer.parseInt(usersId));
     }
 
     public void onClick(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.homeButton:
                 Intent intent = new Intent(this, Skejewels.class);
                 startActivity(intent);
@@ -215,6 +250,130 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
 
     public void onFragmentInteraction(View v) {
 
+    }
+
+    //ACCEPT REQUEST TASK
+
+    class acceptTask extends AsyncTask<String, String, Void> {
+        private ProgressDialog progressDialog = new ProgressDialog(FriendRequests.this);
+        InputStream is = null;
+        String result = "";
+
+        protected void onPreExecute() {
+
+            progressDialog.setMessage("Fetching data...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    acceptTask.this.cancel(true);
+                }
+            });
+        }
+
+        protected Void doInBackground(String... params) {
+
+            String url_select = "http://skejewels.com/Android/AndroidFriendRequestAccept.php?UserId=" + userId + "&RequesterId=" + requesterId;
+            Log.d("Friend_Requests", "" + url_select);
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
+
+
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is = httpEntity.getContent();
+
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+            }
+            try {
+                StringBuilder sb = new StringBuilder();
+                is.close();
+                result = sb.toString();
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result " + e.toString());
+            }
+
+            return null;
+
+        }
+
+        protected void onPostExecute(Void v) {
+        }
+    }
+
+    //DECLINE REQUEST TASK
+    class declineTask extends AsyncTask<String, String, Void> {
+        private ProgressDialog progressDialog = new ProgressDialog(FriendRequests.this);
+        InputStream is = null;
+        String result = "";
+
+        protected void onPreExecute() {
+
+            progressDialog.setMessage("Fetching data...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    declineTask.this.cancel(true);
+                }
+            });
+        }
+
+        protected Void doInBackground(String... params) {
+
+            String url_select = "http://skejewels.com/Android/AndroidFriendRequestDecline.php?UserId=" + userId + "&RequesterId=" + requesterId;
+            Log.d("Friend_Requests", "" + url_select);
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url_select);
+
+
+            ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            try {
+                httpPost.setEntity(new UrlEncodedFormEntity(param));
+
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                HttpEntity httpEntity = httpResponse.getEntity();
+
+                //read content
+                is = httpEntity.getContent();
+
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+            }
+            try {
+                StringBuilder sb = new StringBuilder();
+                is.close();
+                result = sb.toString();
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error converting result " + e.toString());
+            }
+
+            return null;
+
+        }
+
+        protected void onPostExecute(Void v) {
+        }
+    }
+
+    public void removeACard(int whichCard) {
+        int whichIds = whichCard * 5;
+        for (int j = whichIds; j < whichIds + 5; j++) {
+            findViewById(ids.get(j)).setVisibility(View.INVISIBLE);
+        }
     }
 
     class task extends AsyncTask<String, String, Void> {
@@ -282,21 +441,19 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
         protected void onPostExecute(Void v) {
             try {
                 String[] indivs = result.split("pampurppampurpampurp");
-                Log.d("Friends Length", indivs.length + " is how many friend requests length is");
-                if(indivs.length == 1){
+                if (indivs.length == 1) {
                     removeFirstBox();
-                }else {
+                } else {
                     for (int i = 0; i < indivs.length - 1; i += 4) {
-                        if(i == 0){
+                        if (i == 0) {
                             makeFirstCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
-                        }else {
+                        } else {
                             makeCard(indivs[i + 1], indivs[i + 2], indivs[i + 3]);
                         }
                     }
                 }
 
                 this.progressDialog.dismiss();
-
 
 
             } catch (Exception e) {
@@ -308,8 +465,57 @@ public class FriendRequests extends AppCompatActivity implements NavigationDrawe
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
     }
+
     public static float pxFromDp(final Context context, final float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    private View.OnClickListener getFriendRequestListener() {
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                Button button = (Button) view;
+                for (int i = 0; i < requestButtonIds.size(); i++) {
+                    if (button.getId() == requestButtonIds.get(i)) {
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 100) {
+                            int whichCard = 0;
+                            if (i == 0 || i == 1) {
+                                removeACard(0);
+                                Log.d("s", "this is accept" + " " + whichCard + " " + requesterId);
+                                    new acceptTask().execute();
+                                removeACard(whichCard);
+                                if(i == 1){
+                                    removeACard(0);
+                                    Log.d("s", "this is decline" + " " + whichCard + " " + requesterId);
+                                    new declineTask().execute();
+                                    removeACard(whichCard);
+                                }
+                            } else {
+                                if (i % 2 == 0) {
+                                    whichCard = i / 2;
+                                    requesterId = requesterIds.get(whichCard);
+                                    Log.d("s", "this is decline" + " " + whichCard + " " + requesterId);
+                                    new declineTask().execute();
+                                    removeACard(whichCard);
+                                } else {
+                                    whichCard = (i - 1) / 2;
+                                    requesterId = requesterIds.get(whichCard);
+                                    Log.d("s", "this is accept" + " " + whichCard + " " + requesterId);
+//                                    new acceptTask().execute();
+                                    removeACard(whichCard);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private void setId(){
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String defaultValue = "NO ID";
+        userId = Integer.parseInt(sharedPreferences.getString("current_user_id", defaultValue));
     }
 
 }

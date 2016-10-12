@@ -3,5 +3,8 @@
     <color name="primaryColor">#009688</color>
     <color name="primaryColorDark">#00796b</color>
     <color name="accentColor"> #fff176</color>
+    <color name="lightGray">#888888</color>
+    <color name="veryLightGray">#e6e6e6</color>
+    <color name="LightestGray">#d9d9d9</color>
     <color name="text">#000000</color>
 </resources>
